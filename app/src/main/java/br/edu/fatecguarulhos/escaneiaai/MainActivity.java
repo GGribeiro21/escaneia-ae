@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
         //add();
         inicializarValores();
         configurarNavbar();
+        //dbConnect();
     }
     private void inicializarValores(){
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-
     }
     private void preencherLayoutDados(){
         LinearLayout ll = findViewById(R.id.layout_dados);
@@ -144,13 +144,20 @@ public class MainActivity extends AppCompatActivity {
         cr.add(evento).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                text_teste.setText("Dados enviados com sucesso!");
+                //text_teste.setText("Dados enviados com sucesso!");
+                //Toast.makeText(this, "sucesso", Toast.LENGTH_SHORT).show();
+                showToast("sucesso");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                text_teste.setText("Erro: " + e.getMessage());
+                showToast(e.getMessage());
+                //text_teste.setText("Erro: " + e.getMessage());
+                //Toast.makeText(getApplicationContext(), "Erro " + e.getMessage().toString(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    public void showToast(String msg){
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

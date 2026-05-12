@@ -1,7 +1,10 @@
 package br.edu.fatecguarulhos.escaneiaai;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -10,8 +13,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationBarMenu;
+import com.google.android.material.navigation.NavigationBarView;
+
+import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
+
 public class TelaEvento extends AppCompatActivity {
     private TextView txtTituloEvento;
+    private FloatingActionButton fabRetorno;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,5 +36,13 @@ public class TelaEvento extends AppCompatActivity {
         txtTituloEvento = findViewById(R.id.txtTituloEvento_actv_tela_evento);
         String str = it.getStringExtra("titulo");
         txtTituloEvento.setText(it.getStringExtra("titulo"));
+        //inicializarValores();
+    }
+    private void imprimirQrCode(View view){
+        Bitmap qrCode = QrCodeManager.gerarQrCode("identificacao");
+
+    }
+    public void voltar(View view){
+        finish();
     }
 }

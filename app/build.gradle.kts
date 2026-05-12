@@ -43,6 +43,8 @@ dependencies {
     implementation("com.google.android.material:material:1.14.0-alpha10")
     implementation(libs.constraintlayout)
     implementation(libs.firebase.firestore)
+    implementation(libs.recyclerview)
+    implementation(libs.coordinatorlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
