@@ -3,16 +3,20 @@ package br.edu.fatecguarulhos.escaneiaai.components;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import br.edu.fatecguarulhos.escaneiaai.R;
 
 public class CardEvento extends ConstraintLayout {
+    private String titulo, corpo;
     private TextView textTitulo, textCorpo;
-
+    private CardView cardView;
     public CardEvento(Context context){
         super(context);
         inicializarComponentes(context);
@@ -24,6 +28,13 @@ public class CardEvento extends ConstraintLayout {
     private void inicializarComponentes(Context context){
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.card_evento, this, true);
+        CardView card = findViewById(R.id.cardView_evento);
+        card.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, this.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     public void alterarConteudo(String titulo, String corpo){
         TextView textTitulo, textCorpo;
