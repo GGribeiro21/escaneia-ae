@@ -1,8 +1,11 @@
 package br.edu.fatecguarulhos.escaneiaai;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,6 +26,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -59,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         inicializarValores();
         configurarNavbar();
         //dbConnect();
+        databaseConnectionTest();
+        //testeDbLeitura();
     }
     private void inicializarValores(){
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -100,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
             selectedFragment = new HomeFragment();
         }
         if(id == R.id.item_perfil){
+            //dbConnect();
             selectedFragment = new PaginaEventos();
         }
         if (selectedFragment != null) {
@@ -138,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void dbConnect(){
+        System.out.println("Iniciou");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference cr = db.collection("eventos");
         Evento evento = new Evento("Grande evento");
@@ -147,17 +159,62 @@ public class MainActivity extends AppCompatActivity {
                 //text_teste.setText("Dados enviados com sucesso!");
                 //Toast.makeText(this, "sucesso", Toast.LENGTH_SHORT).show();
                 showToast("sucesso");
+                System.out.println("sucesso");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 showToast(e.getMessage());
+                System.out.println(e.getMessage());
                 //text_teste.setText("Erro: " + e.getMessage());
                 //Toast.makeText(getApplicationContext(), "Erro " + e.getMessage().toString(), Toast.LENGTH_SHORT).show();
             }
         });
+        System.out.println("Acabou");
     }
     public void showToast(String msg){
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public void databaseConnectionTest(){
+        FirebaseDatabase database  = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        //Evento evento = new Evento("Grande evento3");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String value = snapshot.getValue().toString();
+                //Log.d("", "Value is: " + value);
+                System.out.println("DADOs -> " + value);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                //Log.w("teste", "failed toreadvalue.", error.toException());
+                System.out.println("foi nao");
+            }
+        });
+        //myRef.child("eventos").push().setValue(evento);
+
+
+    }
+
+    public void testeDbLeitura(){
+        FirebaseDatabase database  = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String value = snapshot.getValue(String.class);
+                Log.d("", "Value is: " + value);
+                System.out.println("DADOs -> " + value);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("", "failed toreadvalue.", error.toException());
+                System.out.println("foi nao");
+            }
+        });
     }
 }
