@@ -21,8 +21,10 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         configurarNavbar();
         //dbConnect();
         databaseConnectionTest();
-        //testeDbLeitura();
+        testeDbLeitura();
     }
     private void inicializarValores(){
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -202,19 +204,17 @@ public class MainActivity extends AppCompatActivity {
     public void testeDbLeitura(){
         FirebaseDatabase database  = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.child("eventos").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String value = snapshot.getValue(String.class);
-                Log.d("", "Value is: " + value);
-                System.out.println("DADOs -> " + value);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("", "failed toreadvalue.", error.toException());
-                System.out.println("foi nao");
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if(!task.isSuccessful()){
+                    System.out.println("fudeu");
+                } else {
+                    System.out.println(":D");
+                }
             }
         });
+
+
     }
 }
