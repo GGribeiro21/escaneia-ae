@@ -17,15 +17,21 @@ import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.models.Participante;
 
 public class TempDbManager {
-    public void dbAddTest(){
-        FirebaseDatabase database  = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
-        Evento e = new Evento("Grande evento3");
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+    public TempDbManager(){
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
+    }
+    public void adicionarEvento(Evento e){
+        /*
+        Evento e = new Evento("Grande evento");
         List<Participante> p = new ArrayList<>();
-        p.add(new Participante("Fulano"));
-        p.add(new Participante("Ciclano"));
-        p.add(new Participante("Fulano2"));
+        p.add(new Participante("Fulano1"));
+        p.add(new Participante("Ciclano1"));
+        p.add(new Participante("Fulano21"));
         e.setParticipantes(p);
+         */
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -43,9 +49,7 @@ public class TempDbManager {
 
     }
 
-    public void dbReadTest(){
-        FirebaseDatabase database  = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
+    public void lerV1(){
         myRef.child("eventos").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {

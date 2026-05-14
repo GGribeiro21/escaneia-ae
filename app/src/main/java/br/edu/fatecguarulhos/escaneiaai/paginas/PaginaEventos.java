@@ -1,6 +1,7 @@
 package br.edu.fatecguarulhos.escaneiaai.paginas;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +11,11 @@ import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
 
+import br.edu.fatecguarulhos.escaneiaai.FormCriarEvento;
 import br.edu.fatecguarulhos.escaneiaai.R;
+import br.edu.fatecguarulhos.escaneiaai.TempDbManager;
 import br.edu.fatecguarulhos.escaneiaai.components.CardEvento;
+import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 
 public class PaginaEventos extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -21,6 +25,7 @@ public class PaginaEventos extends Fragment {
     private String mParam1;
     private String mParam2;
     private Button btnAdd;
+    private TempDbManager dbConnection;
 
     public PaginaEventos(){};
 
@@ -33,7 +38,7 @@ public class PaginaEventos extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         */
-
+        dbConnection = new TempDbManager();
     }
 
     @Override
@@ -46,14 +51,15 @@ public class PaginaEventos extends Fragment {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                execBtnAdd();
+                execBtnAdd(v);
             }
         });
         return v;
     }
 
-    public void execBtnAdd(){
-        // System.out.println("foi?");
+    public void execBtnAdd(View view){
+        Intent it = new Intent(view.getContext(), FormCriarEvento.class);
+        startActivity(it);
     }
 
 }
