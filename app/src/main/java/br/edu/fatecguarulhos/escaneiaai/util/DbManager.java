@@ -3,8 +3,6 @@ package br.edu.fatecguarulhos.escaneiaai.util;
 import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,12 +15,12 @@ import java.util.List;
 
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 
-public class TempDbManager {
+public class DbManager {
     private View v;
     private FirebaseDatabase database;
     private FirebaseFirestore firestore;
     //private DatabaseReference myRef;
-    public TempDbManager(){
+    public DbManager(){
         database = FirebaseDatabase.getInstance();
         //myRef = database.getReference();
         /*
@@ -61,7 +59,29 @@ public class TempDbManager {
                     Evento evento = postSnapshot.getValue(Evento.class);
                     listaEventos.add(evento);
                 }
-                callback.onCallback(listaEventos);
+                callback.onCallbackForAll(listaEventos);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("Firebase", "Falha na leitura.", databaseError.toException());
+            }
+        });
+    }
+
+    public void lerPorId(String id, FirebaseCallback callback){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("eventos");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Evento e = null;
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Evento evento = postSnapshot.getValue(Evento.class);
+                    if(evento.getId().equals(id))
+                        e = evento;
+                }
+                callback.onCallBackByid(e);
             }
 
             @Override

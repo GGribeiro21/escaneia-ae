@@ -19,7 +19,7 @@ import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.components.CardEvento;
 import br.edu.fatecguarulhos.escaneiaai.util.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
-import br.edu.fatecguarulhos.escaneiaai.util.TempDbManager;
+import br.edu.fatecguarulhos.escaneiaai.util.DbManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,7 +38,7 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     private FloatingActionButton btnQrCode;
-    private TempDbManager dbConnection;
+    private DbManager dbConnection;
     private List<Evento> eventos = new ArrayList<>();
 
     public HomeFragment() {
@@ -90,15 +90,20 @@ public class HomeFragment extends Fragment {
             ll.addView(card);
         }
         */
-        dbConnection = new TempDbManager();
+        dbConnection = new DbManager();
         dbConnection.lerTodos(new FirebaseCallback() {
             @Override
-            public void onCallback(List<Evento> lista) {
+            public void onCallbackForAll(List<Evento> lista) {
                 for(int i = 0; i < lista.size(); i++){
                     CardEvento card = new CardEvento((getContext()));
                     card.alterarConteudo(lista.get(i));
                     ll.addView(card);
                 }
+            }
+
+            @Override
+            public void onCallBackByid(Evento e) {
+
             }
         });
 

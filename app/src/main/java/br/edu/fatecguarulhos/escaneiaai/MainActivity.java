@@ -41,6 +41,8 @@ import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.models.Participante;
 import br.edu.fatecguarulhos.escaneiaai.paginas.HomeFragment;
 import br.edu.fatecguarulhos.escaneiaai.paginas.PaginaEventos;
+import br.edu.fatecguarulhos.escaneiaai.util.DbManager;
+import br.edu.fatecguarulhos.escaneiaai.util.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -115,9 +117,28 @@ public class MainActivity extends AppCompatActivity {
         if(msgQrCode == null){
             super.onActivityResult(requestCode, resultCode, data);
         } else {
-            Toast.makeText(this, msgQrCode, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, msgQrCode, Toast.LENGTH_SHORT).show();
+            DbManager dbConnection = new DbManager();
+            dbConnection.lerPorId(
+                    msgQrCode,
+                    new FirebaseCallback() {
+                        @Override
+                        public void onCallbackForAll(List<Evento> lista) {
+
+                        }
+
+                        @Override
+                        public void onCallBackByid(Evento e) {
+                            //System.out.println("Evento -> " + e.getTitulo());
+                            confirmarEntrada(e);
+                        }
+                    });
         }
     }
+    public void confirmarEntrada(Evento e){
+
+    }
+
     private void add(){
         //layoutEventos = findViewById(R.id.layout_eventos);
         for(int i = 0; i < 50; i++){

@@ -30,6 +30,7 @@
             android:id="@+id/btnVolta_telaQrCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="voltar"
             android:text="voltar" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
