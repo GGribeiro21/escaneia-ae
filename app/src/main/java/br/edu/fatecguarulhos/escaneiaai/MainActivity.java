@@ -1,8 +1,8 @@
 package br.edu.fatecguarulhos.escaneiaai;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.Telephony;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,15 +18,27 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import br.edu.fatecguarulhos.escaneiaai.models.Evento;
+import br.edu.fatecguarulhos.escaneiaai.models.Participante;
 import br.edu.fatecguarulhos.escaneiaai.paginas.HomeFragment;
 import br.edu.fatecguarulhos.escaneiaai.paginas.PaginaEventos;
 import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
@@ -56,12 +68,12 @@ public class MainActivity extends AppCompatActivity {
         //text_teste = findViewById(R.id.text_teste);
         //dbConnect();
         //add();
+
         inicializarValores();
         configurarNavbar();
     }
     private void inicializarValores(){
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-
     }
     private void preencherLayoutDados(){
         LinearLayout ll = findViewById(R.id.layout_dados);
@@ -76,17 +88,6 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                /*
-                int id = menuItem.getItemId();
-                Fragment selectedFragment = null;
-                if(id == R.id.item_eventos){
-                    selectedFragment = new HomeFragment();
-                }
-                if(selectedFragment != null){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
-                }
-                */
-                //initiateEventoMenuItem(id);
                 int id = menuItem.getItemId();
                 iniciarMenuItem(id);
                 return true;
@@ -110,18 +111,6 @@ public class MainActivity extends AppCompatActivity {
     // Resultado da leitura do QR code na tela "HomeFragment"
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        /*
-        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(intentResult != null){
-            String contents = intentResult.getContents();
-            if(contents != null){
-                String output = intentResult.getContents();
-                Toast.makeText(this , output, Toast.LENGTH_SHORT).show();
-            }
-        }else{
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-         */
         String msgQrCode = QrCodeManager.getResultadoLeitor(requestCode, resultCode, data);
         if(msgQrCode == null){
             super.onActivityResult(requestCode, resultCode, data);
@@ -144,13 +133,55 @@ public class MainActivity extends AppCompatActivity {
         cr.add(evento).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                text_teste.setText("Dados enviados com sucesso!");
+                System.out.println("sucesso");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                text_teste.setText("Erro: " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         });
+    }
+    public void dbAddTest(){
+        FirebaseDatabase database  = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        Evento e = new Evento("Grande evento3");
+        List<Participante> p = new ArrayList<>();
+        p.add(new Participante("Fulano"));
+        p.add(new Participante("Ciclano"));
+        p.add(new Participante("Fulano2"));
+        e.setParticipantes(p);
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String value = snapshot.getValue().toString();
+                System.out.println("DADOs -> " + value);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("foi nao");
+            }
+        });
+        myRef.child("eventos").push().setValue(e);
+
+
+    }
+
+    public void dbReadTest(){
+        FirebaseDatabase database  = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        myRef.child("eventos").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if(!task.isSuccessful()){
+                    System.out.println("fudeu");
+                } else {
+                    System.out.println(":D");
+                }
+            }
+        });
+
+
     }
 }

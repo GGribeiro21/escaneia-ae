@@ -1,35 +1,33 @@
 package br.edu.fatecguarulhos.escaneiaai.models;
 
-import com.google.type.DateTime;
+import org.checkerframework.checker.units.qual.A;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Evento {
-    private String id;
     private String titulo;
-    private LocalDateTime dataInicio;
-    private LocalDateTime dataFim;
-    private LocalDateTime previsaoInicio;
-    private LocalDateTime previsaoFim;
-    private boolean cancelado;
-    private String descricao;
-    private Palestrante palestrante;
-    public boolean eventoIniciado(){
-        return dataInicio != null;
+    private List<Participante> participantes = new ArrayList<>();
+    public Evento(String titulo){
+        this.titulo = titulo;
     }
-    public boolean eventoEmAtraso(){
-        return false;
+
+    public Evento() {
     }
-    public boolean eventoFinalizado(){
-        return false;
+
+    public String getTitulo() {
+        return titulo;
     }
-    public void iniciarEvento(){
-        //Hora atual;
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
-    public void cancelarEvento(){
-        cancelado = true;
+
+    public List<Participante> getParticipantes() {
+        return participantes;
     }
-    private void notificarUsuarios(){
-        //Lógica aqui
+
+    public void setParticipantes(List<Participante> participantes) {
+        this.participantes = participantes;
     }
 }
