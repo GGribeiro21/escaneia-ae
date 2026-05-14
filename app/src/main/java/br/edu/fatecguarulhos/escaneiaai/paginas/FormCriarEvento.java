@@ -3,11 +3,10 @@ package br.edu.fatecguarulhos.escaneiaai.paginas;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +17,11 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.type.DateTime;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -29,7 +33,7 @@ public class FormCriarEvento extends AppCompatActivity {
     private EditText edtNomeEvento, edtDataInicio, edtDataFim;
     private Button btnCriar, btnVoltar;
     private DbManager dbConnection;
-    private Calendar calendar = Calendar.getInstance();
+    private Calendar calendario = Calendar.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +44,9 @@ public class FormCriarEvento extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        configurarItens();
+    }
+    private void configurarItens(){
         dbConnection = new DbManager();
         edtDataInicio = findViewById(R.id.edtdataInicio_formCriaEvento);
         edtDataFim = findViewById(R.id.edtdataFim_formCriaEvento);
@@ -48,6 +54,7 @@ public class FormCriarEvento extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mostrarEscolhaDateTime(edtDataFim);
+
             }
         });
         edtDataInicio.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +69,10 @@ public class FormCriarEvento extends AppCompatActivity {
         btnCriar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                criarEvento();
+                if(datasValidas())
+                    criarEvento();
+                else
+                    Toast.makeText(v.getContext(), "Data inicio/fim inválida", Toast.LENGTH_SHORT).show();
             }
         });
         btnVoltar.setOnClickListener(new View.OnClickListener() {
@@ -71,42 +81,81 @@ public class FormCriarEvento extends AppCompatActivity {
                 finish();
             }
         });
+
     }
 
     private void criarEvento(){
         Evento e = new Evento();
         e.setTitulo(edtNomeEvento.getText().toString());
+        e.setDataInicio(edtDataInicio.getText().toString());
+        e.setDataFim(edtDataFim.getText().toString());
         dbConnection.adicionarEvento(e);
         finish();
     }
 
-    private DateTime dataInicio(){
-        return null;
-    }
-
-    private void formatacaoDataEvento(EditText edtData){
-        String data = edtData.getText().toString();
-        if(data.length() == 2 || data.length() == 5)
-            edtData.setText(data + "/");
-    }
-
     private void mostrarEscolhaDateTime(EditText edtData){
-        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-            calendar.set(Calendar.YEAR, year);
-            calendar.set(Calendar.MONTH, month);
-            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        new DatePickerDialog(this, (view, ano, mes, dia) -> {
+            calendario.set(Calendar.YEAR, ano);
+            calendario.set(Calendar.MONTH, mes);
+            calendario.set(Calendar.DAY_OF_MONTH, dia);
 
-            new TimePickerDialog(this, (timeView, hourOfDay, minute) -> {
-                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                calendar.set(Calendar.MINUTE, minute);
+            new TimePickerDialog(this, (timeView, hora, minuto) -> {
+                calendario.set(Calendar.HOUR_OF_DAY, hora);
+                calendario.set(Calendar.MINUTE, minuto);
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-                edtData.setText(sdf.format(calendar.getTime()));
+                edtData.setText(sdf.format(calendario.getTime()));
 
-            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show();
+            }, calendario.get(Calendar.HOUR_OF_DAY), calendario.get(Calendar.MINUTE), false).show();
 
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+        }, calendario.get(Calendar.YEAR), calendario.get(Calendar.MONTH), calendario.get(Calendar.DAY_OF_MONTH)).show();
+        datasValidas();
     }
+
+    private boolean datasValidas(){
+        String strInicio = edtDataInicio.getText().toString();
+        String strFim = edtDataFim.getText().toString();
+        // os 2 campos tem que estar cheios
+        if(strInicio.equals("") || strFim.equals(""))
+            return false;
+        String[] dataHoraInicio = strInicio.split(" ");
+        String[] dataInicio = dataHoraInicio[0].split("-");
+        String[] horaInicio = dataHoraInicio[1].split(":");
+
+        String[] dataHoraFim = strFim.split(" ");
+        String[] dataFim = dataHoraFim[0].split("-");
+        String[] horaFim = dataHoraFim[1].split(":");
+
+        // ano seguite
+        if(Integer.parseInt(dataFim[0]) > Integer.parseInt(dataInicio[0]))
+            return true;
+        // mesmo ano
+        if(Integer.parseInt(dataFim[0]) == Integer.parseInt(dataInicio[0])){
+            // mes seguinte
+            if(Integer.parseInt(dataFim[1]) > Integer.parseInt(dataInicio[1]))
+                return true;
+            // mesmo mes
+            if(Integer.parseInt(dataFim[1]) == Integer.parseInt(dataInicio[1])) {
+                // dia seguinte
+                if(Integer.parseInt(dataFim[2]) > Integer.parseInt(dataInicio[2]))
+                    return true;
+                // mesmo dia
+                if(Integer.parseInt(dataFim[2]) == Integer.parseInt(dataInicio[2])) {
+                    // hora seguinte
+                    if(Integer.parseInt(horaFim[0]) > Integer.parseInt(horaInicio[0]))
+                        return true;
+                    // mesma hora
+                    if(Integer.parseInt(horaFim[0]) == Integer.parseInt(horaInicio[0])) {
+                        // minuto seguinte
+                        if(Integer.parseInt(horaFim[0]) > Integer.parseInt(horaInicio[0]))
+                            return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 }
 
 
