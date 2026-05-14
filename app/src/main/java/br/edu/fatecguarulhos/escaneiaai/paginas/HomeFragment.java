@@ -11,10 +11,15 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.components.CardEvento;
+import br.edu.fatecguarulhos.escaneiaai.util.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
+import br.edu.fatecguarulhos.escaneiaai.util.TempDbManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +38,8 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     private FloatingActionButton btnQrCode;
+    private TempDbManager dbConnection;
+    private List<Evento> eventos = new ArrayList<>();
 
     public HomeFragment() {
         // Required empty public constructor
@@ -73,6 +80,7 @@ public class HomeFragment extends Fragment {
         assert container != null;
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         LinearLayout ll = v.findViewById(R.id.layout_dados);
+        /*
         for(int i = 0; i < 5; i++){
             CardEvento card = new CardEvento(getContext());
             //card.alterarConteudo("Meu titulo " + i, "meu conteudo " + i);
@@ -81,6 +89,19 @@ public class HomeFragment extends Fragment {
             card.alterarConteudo(e);
             ll.addView(card);
         }
+        */
+        dbConnection = new TempDbManager();
+        dbConnection.lerTodos(new FirebaseCallback() {
+            @Override
+            public void onCallback(List<Evento> lista) {
+                for(int i = 0; i < lista.size(); i++){
+                    CardEvento card = new CardEvento((getContext()));
+                    card.alterarConteudo(lista.get(i));
+                    ll.addView(card);
+                }
+            }
+        });
+
         btnQrCode = v.findViewById(R.id.fab);
         btnQrCode.setOnClickListener(new View.OnClickListener() {
             @Override

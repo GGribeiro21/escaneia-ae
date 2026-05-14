@@ -29,6 +29,7 @@ public class FormCriarEvento extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         dbConnection = new TempDbManager();
         edtNomeEvento = findViewById(R.id.edtNomeEvento_formCriarEvento);
         btnCriar = findViewById(R.id.btnCriarEvento_formCriarEvento);

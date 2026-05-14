@@ -9,7 +9,12 @@ import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
+import java.util.List;
+
 import br.edu.fatecguarulhos.escaneiaai.R;
+import br.edu.fatecguarulhos.escaneiaai.components.CardEvento;
+import br.edu.fatecguarulhos.escaneiaai.models.Evento;
+import br.edu.fatecguarulhos.escaneiaai.util.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.util.TempDbManager;
 
 public class PaginaEventos extends Fragment {
@@ -19,7 +24,7 @@ public class PaginaEventos extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private Button btnAdd;
+    private Button btnAdd, btnLer;
     private TempDbManager dbConnection;
 
     public PaginaEventos(){};
@@ -49,12 +54,27 @@ public class PaginaEventos extends Fragment {
                 execBtnAdd(v);
             }
         });
+        btnLer = v.findViewById(R.id.btnTempLer);
+        btnLer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lerEventosTemp();
+            }
+        });
         return v;
     }
 
     public void execBtnAdd(View view){
         Intent it = new Intent(view.getContext(), FormCriarEvento.class);
         startActivity(it);
+    }
+    public void lerEventosTemp(){
+        dbConnection.lerTodos(new FirebaseCallback() {
+            @Override
+            public void onCallback(List<Evento> lista) {
+
+            }
+        });
     }
 
 }
