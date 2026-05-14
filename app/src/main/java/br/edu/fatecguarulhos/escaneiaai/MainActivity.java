@@ -23,7 +23,7 @@ import java.util.List;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.models.Participante;
 import br.edu.fatecguarulhos.escaneiaai.paginas.ListaEventosFragment;
-import br.edu.fatecguarulhos.escaneiaai.paginas.Pagina2Fragment;
+import br.edu.fatecguarulhos.escaneiaai.paginas.PaginaEventos;
 import br.edu.fatecguarulhos.escaneiaai.util.DbManager;
 import br.edu.fatecguarulhos.escaneiaai.util.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if(id == R.id.item_perfil){
             // outra pagina
-            selectedFragment = new Pagina2Fragment();
+            selectedFragment = new PaginaEventos();
         }
         if (selectedFragment != null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();

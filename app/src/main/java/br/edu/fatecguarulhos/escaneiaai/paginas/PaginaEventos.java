@@ -16,8 +16,9 @@ import java.util.List;
 import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.components.CardEvento;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
+import br.edu.fatecguarulhos.escaneiaai.util.DbManager;
 import br.edu.fatecguarulhos.escaneiaai.util.FirebaseCallback;
-import br.edu.fatecguarulhos.escaneiaai.util.TempDbManager;
+import br.edu.fatecguarulhos.escaneiaai.util.DbManager;
 
 public class PaginaEventos extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -28,7 +29,7 @@ public class PaginaEventos extends Fragment {
     private String mParam2;
     private Button btnAdd, btnLer;
     private TextView textIdDispositivo;
-    private TempDbManager dbConnection;
+    private DbManager dbConnection;
 
     public PaginaEventos(){};
 
@@ -41,7 +42,7 @@ public class PaginaEventos extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         */
-        dbConnection = new TempDbManager();
+        dbConnection = new DbManager();
     }
 
     @Override
@@ -57,16 +58,9 @@ public class PaginaEventos extends Fragment {
                 execBtnAdd(v);
             }
         });
-        btnLer = v.findViewById(R.id.btnTempLer);
-        btnLer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                lerEventosTemp();
-            }
-        });
-        String idDispositivo = Settings.Secure.getString(v.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        textIdDispositivo = v.findViewById(R.id.id_dispositivo);
-        textIdDispositivo.setText("Id do dispositivo:" + idDispositivo);
+        //String idDispositivo = Settings.Secure.getString(v.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        //textIdDispositivo = v.findViewById(R.id.id_dispositivo);
+        //textIdDispositivo.setText("Id do dispositivo:" + idDispositivo);
         return v;
     }
 
@@ -77,9 +71,15 @@ public class PaginaEventos extends Fragment {
     public void lerEventosTemp(){
         dbConnection.lerTodos(new FirebaseCallback() {
             @Override
-            public void onCallback(List<Evento> lista) {
+            public void onCallbackForAll(List<Evento> lista) {
 
             }
+
+            @Override
+            public void onCallBackByid(Evento e) {
+
+            }
+
         });
     }
 

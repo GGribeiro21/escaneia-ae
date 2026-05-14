@@ -45,8 +45,8 @@ public class CardEvento extends ConstraintLayout {
     }
     public void alterarConteudo(Evento e){
         evento = e;
-        titulo = evento.getTitulo();
-        corpo = "corpo";
+        titulo = e.getTitulo();
+        corpo = e.getDataInicio() + " < - > " + e.getDataFim();
         TextView textTitulo, textCorpo;
         textTitulo = findViewById(R.id.textView_tituloCard);
         textCorpo = findViewById(R.id.textView_corpoCard);
