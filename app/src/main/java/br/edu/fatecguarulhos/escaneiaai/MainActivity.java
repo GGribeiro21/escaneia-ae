@@ -3,6 +3,7 @@ package br.edu.fatecguarulhos.escaneiaai;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -84,12 +85,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         String msgQrCode = QrCodeManager.getResultadoLeitor(requestCode, resultCode, data);
+        // dividir o id[0] do tipo de qr code[1]
+        String[] msgFatiada = msgQrCode.split("/type=");
         if(msgQrCode == null){
             super.onActivityResult(requestCode, resultCode, data);
         } else {
             DbManager dbConnection = new DbManager();
             dbConnection.lerPorId(
-                    msgQrCode,
+                    msgFatiada[0],
                     // garantir q estejam sincronos
                     new FirebaseCallback() {
                         @Override
@@ -97,18 +100,26 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onCallBackByid(Evento e) {
-                            confirmarEntrada(e);
+                            registrarLeituraQC(e, msgFatiada[1]);
                         }
                     });
         }
     }
-    public void confirmarEntrada(Evento e){
-        DbManager dbConnection = new DbManager();
+    public void registrarLeituraQC(Evento e, String tipoQrCode){
         Participante p = new Participante();
-        p.setNome("p12");
+        p.setNome("TesteEntrada");
         p.setEmail("email1");
         p.setRa("123");
-        dbConnection.registrarEntradaParticipante(e, p);
+        DbManager dbConnection = new DbManager();
+        if(tipoQrCode.equals("entrada"))
+            dbConnection.registrarEntradaParticipante(e, p);
+        else if(tipoQrCode.equals("saida"))
+            dbConnection.registrarSaidaParticipante(e, p);
+        else
+            Toast.makeText(this
+                            ,"Leitura inválida tente novamente"
+                            , Toast.LENGTH_SHORT)
+                    .show();
         //dbConnection.registrarSaidaParticipante(e, p);
     }
 }

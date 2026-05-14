@@ -51,11 +51,11 @@ public class TelaQrCode extends AppCompatActivity {
 
     }
     private void getQrCodeSaida(){
-        Bitmap qrCode = QrCodeManager.gerarQrCode(idEvento + "/?type=saida");
+        Bitmap qrCode = QrCodeManager.gerarQrCode(idEvento + "/type=saida");
         imgQrCode.setImageBitmap(qrCode);
     }
     private void getQrCodeEntrada(){
-        Bitmap qrCode = QrCodeManager.gerarQrCode(idEvento + "/?type=entrada");
+        Bitmap qrCode = QrCodeManager.gerarQrCode(idEvento + "/type=entrada");
         imgQrCode.setImageBitmap(qrCode);
     }
     public void voltar(View view){
