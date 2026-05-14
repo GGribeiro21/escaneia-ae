@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -16,6 +17,7 @@ import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
 
 public class TelaQrCode extends AppCompatActivity {
+    private Button btnQCEntrada, btnQCSaida;
     private String idEvento;
     private ImageView imgQrCode;
     @Override
@@ -31,10 +33,29 @@ public class TelaQrCode extends AppCompatActivity {
         Intent it =  getIntent();
         idEvento = it.getStringExtra("id");
         imgQrCode = findViewById(R.id.imgvQrCode);
-        getQrCode();
+        getQrCodeEntrada();
+        btnQCEntrada = findViewById(R.id.btnQrCodeEntrada_telaQrCode);
+        btnQCEntrada.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getQrCodeEntrada();
+            }
+        });
+        btnQCSaida = findViewById(R.id.btnQrCodeSaida_telaQrCode);
+        btnQCSaida.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getQrCodeSaida();
+            }
+        });
+
     }
-    private void getQrCode(){
-        Bitmap qrCode = QrCodeManager.gerarQrCode(idEvento);
+    private void getQrCodeSaida(){
+        Bitmap qrCode = QrCodeManager.gerarQrCode(idEvento + "/?type=saida");
+        imgQrCode.setImageBitmap(qrCode);
+    }
+    private void getQrCodeEntrada(){
+        Bitmap qrCode = QrCodeManager.gerarQrCode(idEvento + "/?type=entrada");
         imgQrCode.setImageBitmap(qrCode);
     }
     public void voltar(View view){

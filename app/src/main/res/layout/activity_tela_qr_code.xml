@@ -27,10 +27,29 @@
             app:srcCompat="@drawable/ic_launcher_background" />
 
         <Button
+            android:id="@+id/btnQrCodeEntrada_telaQrCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="QrCode Entrada" />
+
+        <Button
+            android:id="@+id/btnQrCodeSaida_telaQrCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="QrCode Saida" />
+
+        <Button
+            android:id="@+id/btnImprimirQrCode_telaQrCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Imprimir" />
+
+        <Button
             android:id="@+id/btnVolta_telaQrCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="voltar"
             android:text="voltar" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
