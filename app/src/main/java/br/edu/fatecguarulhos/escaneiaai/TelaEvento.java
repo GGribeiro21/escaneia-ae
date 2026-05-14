@@ -3,6 +3,8 @@ package br.edu.fatecguarulhos.escaneiaai;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -42,7 +44,20 @@ public class TelaEvento extends AppCompatActivity {
         Bitmap qrCode = QrCodeManager.gerarQrCode("identificacao");
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.appbar_exibir_evento, menu);
+        return true;
+    }
+
+
     public void voltar(View view){
+        finish();
+    }
+
+    public void voltar(MenuItem menuItem){
         finish();
     }
 }
