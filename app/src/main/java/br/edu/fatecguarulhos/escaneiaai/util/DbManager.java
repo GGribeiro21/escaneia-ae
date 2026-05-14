@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
+import br.edu.fatecguarulhos.escaneiaai.models.Participante;
 
 public class DbManager {
     private View v;
@@ -89,5 +90,12 @@ public class DbManager {
                 Log.w("Firebase", "Falha na leitura.", databaseError.toException());
             }
         });
+    }
+    public void updateEventoV1(Evento e, Participante p){
+        DatabaseReference myRef = database.getReference("eventos").child(e.getId());
+        List<Participante> participantes = e.getParticipantes();
+        participantes.add(p);
+        e.setParticipantes(participantes);
+        myRef.setValue(e);
     }
 }

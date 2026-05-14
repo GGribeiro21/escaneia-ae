@@ -136,7 +136,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void confirmarEntrada(Evento e){
-
+        DbManager dbConnection = new DbManager();
+        dbConnection.updateEventoV1(e, new Participante("Caio1"));
     }
 
     private void add(){
