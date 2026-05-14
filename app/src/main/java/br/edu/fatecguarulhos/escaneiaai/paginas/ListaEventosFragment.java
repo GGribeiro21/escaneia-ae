@@ -19,14 +19,14 @@ import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.components.CardEvento;
 import br.edu.fatecguarulhos.escaneiaai.util.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
-import br.edu.fatecguarulhos.escaneiaai.util.TempDbManager;
+import br.edu.fatecguarulhos.escaneiaai.util.DbManager;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
+ * Use the {@link ListaEventosFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class ListaEventosFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,10 +38,10 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     private FloatingActionButton btnQrCode;
-    private TempDbManager dbConnection;
+    private DbManager dbConnection;
     private List<Evento> eventos = new ArrayList<>();
 
-    public HomeFragment() {
+    public ListaEventosFragment() {
         // Required empty public constructor
     }
 
@@ -54,8 +54,8 @@ public class HomeFragment extends Fragment {
      * @return A new instance of fragment HomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
+    public static ListaEventosFragment newInstance(String param1, String param2) {
+        ListaEventosFragment fragment = new ListaEventosFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -80,29 +80,24 @@ public class HomeFragment extends Fragment {
         assert container != null;
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         LinearLayout ll = v.findViewById(R.id.layout_dados);
-        /*
-        for(int i = 0; i < 5; i++){
-            CardEvento card = new CardEvento(getContext());
-            //card.alterarConteudo("Meu titulo " + i, "meu conteudo " + i);
-            Evento e = new Evento(("Palestra " + i));
-            QrCodeManager.eventoList.add(card);
-            card.alterarConteudo(e);
-            ll.addView(card);
-        }
-        */
-        dbConnection = new TempDbManager();
+        dbConnection = new DbManager();
         dbConnection.lerTodos(new FirebaseCallback() {
             @Override
-            public void onCallback(List<Evento> lista) {
+            public void onCallbackForAll(List<Evento> lista) {
                 for(int i = 0; i < lista.size(); i++){
                     CardEvento card = new CardEvento((getContext()));
                     card.alterarConteudo(lista.get(i));
                     ll.addView(card);
                 }
             }
+
+            @Override
+            public void onCallBackByid(Evento e) {
+
+            }
         });
 
-        btnQrCode = v.findViewById(R.id.fab);
+        btnQrCode = v.findViewById(R.id.fabAbrirLeitorQrCode_fragmentHome);
         btnQrCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +106,7 @@ public class HomeFragment extends Fragment {
         });
         return v;
     }
+    // botão para abrir camera e ler QrCode
     public void lerQrCode(){
         QrCodeManager.lerQrCode(new IntentIntegrator(getActivity()));
     }

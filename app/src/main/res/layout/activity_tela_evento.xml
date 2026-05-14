@@ -20,11 +20,10 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabRetorno"
+                android:id="@+id/fabQrCode_telaEvento"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:onClick="voltar"
                 app:srcCompat="@drawable/ic_launcher_background" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
