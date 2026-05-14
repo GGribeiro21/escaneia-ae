@@ -1,8 +1,9 @@
 package br.edu.fatecguarulhos.escaneiaai;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -14,14 +15,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationBarMenu;
-import com.google.android.material.navigation.NavigationBarView;
 
-import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
+import br.edu.fatecguarulhos.escaneiaai.paginas.TelaQrCode;
 
 public class TelaEvento extends AppCompatActivity {
     private TextView txtTituloEvento;
     private FloatingActionButton fabRetorno;
+    private String idEvento;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,16 +33,38 @@ public class TelaEvento extends AppCompatActivity {
             return insets;
         });
         Intent it = getIntent();
+        // coletar id do evento
+        idEvento = it.getStringExtra("id");
         txtTituloEvento = findViewById(R.id.txtTituloEvento_actv_tela_evento);
-        String str = it.getStringExtra("titulo");
         txtTituloEvento.setText(it.getStringExtra("titulo"));
-        //inicializarValores();
+        fabRetorno = findViewById(R.id.fabQrCode_telaEvento);
+        fabRetorno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                telaQrCode();
+            }
+        });
     }
-    private void imprimirQrCode(View view){
-        Bitmap qrCode = QrCodeManager.gerarQrCode("identificacao");
+    private void telaQrCode(){
+        Intent it  = new Intent(this, TelaQrCode.class);
+        // enviar id para uso na criação do qrCode
+        it.putExtra("id",idEvento);
+        startActivity(it);
+    }
+    // appbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.appbar_exibir_evento, menu);
+        return true;
+    }
 
-    }
+
     public void voltar(View view){
+        finish();
+    }
+
+    public void voltar(MenuItem menuItem){
         finish();
     }
 }

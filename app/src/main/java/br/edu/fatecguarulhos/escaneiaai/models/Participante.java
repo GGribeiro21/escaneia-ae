@@ -1,8 +1,7 @@
 package br.edu.fatecguarulhos.escaneiaai.models;
 
 public class Participante {
-    private String nome;
-    //private boolean entrada;
+    private String nome, email, ra;
     private boolean saida;
 
     public Participante() {
@@ -10,7 +9,6 @@ public class Participante {
 
     public Participante(String nome) {
         this.nome = nome;
-        //this.entrada = false;
         this.saida = false;
     }
 
@@ -21,20 +19,28 @@ public class Participante {
     public void setNome(String nome) {
         this.nome = nome;
     }
-/*
-    public boolean isEntrada() {
-        return entrada;
-    }
 
-    public void setEntrada(boolean entrada) {
-        this.entrada = entrada;
-    }
-*/
     public boolean isSaida() {
         return saida;
     }
 
     public void setSaida(boolean saida) {
         this.saida = saida;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getRa() {
+        return ra;
+    }
+
+    public void setRa(String ra) {
+        this.ra = ra;
     }
 }

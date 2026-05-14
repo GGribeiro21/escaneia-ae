@@ -12,13 +12,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import br.edu.fatecguarulhos.escaneiaai.R;
-import br.edu.fatecguarulhos.escaneiaai.util.TempDbManager;
+import br.edu.fatecguarulhos.escaneiaai.util.DbManager;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 
 public class FormCriarEvento extends AppCompatActivity {
     private EditText edtNomeEvento;
     private Button btnCriar, btnVoltar;
-    private TempDbManager dbConnection;
+    private DbManager dbConnection;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +30,7 @@ public class FormCriarEvento extends AppCompatActivity {
             return insets;
         });
 
-        dbConnection = new TempDbManager();
+        dbConnection = new DbManager();
         edtNomeEvento = findViewById(R.id.edtNomeEvento_formCriarEvento);
         btnCriar = findViewById(R.id.btnCriarEvento_formCriarEvento);
         btnVoltar = findViewById(R.id.btnVoltar_formCriarEvento);
