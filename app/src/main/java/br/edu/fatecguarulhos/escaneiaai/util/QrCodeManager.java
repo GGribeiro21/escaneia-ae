@@ -21,7 +21,7 @@ public class QrCodeManager {
     public static void lerQrCode(IntentIntegrator intentIntegrator){
         //IntentIntegrator intentIntegrator = new IntentIntegrator(v.getActivity());
         intentIntegrator.setOrientationLocked(false);
-        intentIntegrator.setPrompt("Scaneie o QR CODE");
+        intentIntegrator.setPrompt("Escaneie o QR CODE");
         intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
         intentIntegrator.setOrientationLocked(true);
         intentIntegrator.setBeepEnabled(false);
