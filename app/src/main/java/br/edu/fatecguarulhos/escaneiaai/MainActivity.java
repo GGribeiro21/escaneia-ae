@@ -22,7 +22,7 @@ import java.util.List;
 
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.models.Participante;
-import br.edu.fatecguarulhos.escaneiaai.paginas.ListaEventosFragment;
+import br.edu.fatecguarulhos.escaneiaai.paginas.PaginaListaEventos;
 import br.edu.fatecguarulhos.escaneiaai.paginas.PaginaEventos;
 import br.edu.fatecguarulhos.escaneiaai.util.DbManager;
 import br.edu.fatecguarulhos.escaneiaai.util.FirebaseCallback;
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment selectedFragment = null;
         if (id == R.id.item_eventos) {
             // Lista de eventos
-            selectedFragment = new ListaEventosFragment();
+            selectedFragment = new PaginaListaEventos();
         }
         if(id == R.id.item_perfil){
             // outra pagina
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
         } else {
             DbManager dbConnection = new DbManager();
-            dbConnection.lerPorId(
+            dbConnection.getEventoById(
                     msgFatiada[0],
                     // garantir q estejam sincronos
                     new FirebaseCallback() {

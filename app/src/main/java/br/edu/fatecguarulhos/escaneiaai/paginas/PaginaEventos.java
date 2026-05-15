@@ -2,7 +2,6 @@ package br.edu.fatecguarulhos.escaneiaai.paginas;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +10,9 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import java.util.List;
-
 import br.edu.fatecguarulhos.escaneiaai.R;
-import br.edu.fatecguarulhos.escaneiaai.models.Evento;
+import br.edu.fatecguarulhos.escaneiaai.telas.TelaCriarEvento;
 import br.edu.fatecguarulhos.escaneiaai.util.DbManager;
-import br.edu.fatecguarulhos.escaneiaai.util.FirebaseCallback;
 
 public class PaginaEventos extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -49,20 +45,23 @@ public class PaginaEventos extends Fragment {
         // Inflate the layout for this fragment
         assert container != null;
         View v = inflater.inflate(R.layout.fragment_perfil, container, false);
+        inicializarComponentes(v);
+        configurarComponentes();
+        //String idDispositivo = Settings.Secure.getString(v.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        //textIdDispositivo = v.findViewById(R.id.id_dispositivo);
+        //textIdDispositivo.setText("Id do dispositivo:" + idDispositivo);
+        return v;
+    }
+    private void inicializarComponentes(View v){
         btnAdd = v.findViewById(R.id.btnTempAddEvento);
+    }
+    private void configurarComponentes(){
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                execBtnAdd(v);
+                Intent it = new Intent(getContext(), TelaCriarEvento.class);
+                startActivity(it);
             }
         });
-        String idDispositivo = Settings.Secure.getString(v.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        return v;
     }
-
-    public void execBtnAdd(View view){
-        Intent it = new Intent(view.getContext(), FormCriarEvento.class);
-        startActivity(it);
-    }
-
 }

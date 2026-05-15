@@ -10,7 +10,7 @@ import java.util.List;
 public class Evento {
     private String titulo, id;
     private List<Participante> participantes = new ArrayList<>();
-    private DateTime dataInicio, dataFim;
+    private String dataInicio, dataFim;
     public Evento(String titulo){
         this.titulo = titulo;
     }
@@ -42,19 +42,19 @@ public class Evento {
         this.id = id;
     }
 
-    public DateTime getDataInicio() {
+    public String getDataInicio() {
         return dataInicio;
     }
 
-    public void setDataInicio(DateTime dataInicio) {
+    public void setDataInicio(String dataInicio) {
         this.dataInicio = dataInicio;
     }
 
-    public DateTime getDataFim() {
+    public String getDataFim() {
         return dataFim;
     }
 
-    public void setDataFim(DateTime dataFim) {
+    public void setDataFim(String dataFim) {
         this.dataFim = dataFim;
     }
 }
