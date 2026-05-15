@@ -1,4 +1,4 @@
-package br.edu.fatecguarulhos.escaneiaai.paginas;
+package br.edu.fatecguarulhos.escaneiaai.telas;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -14,14 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.type.DateTime;
-
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -29,7 +22,7 @@ import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.util.DbManager;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 
-public class FormCriarEvento extends AppCompatActivity {
+public class TelaCriarEvento extends AppCompatActivity {
     private EditText edtNomeEvento, edtDataInicio, edtDataFim;
     private Button btnCriar, btnVoltar;
     private DbManager dbConnection;
@@ -44,13 +37,33 @@ public class FormCriarEvento extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        configurarItens();
+        inicializarComponentes();
+        configurarComponentes();
     }
-    private void configurarItens(){
+    private void inicializarComponentes(){
         dbConnection = new DbManager();
         edtDataInicio = findViewById(R.id.edtdataInicio_formCriaEvento);
         edtDataFim = findViewById(R.id.edtdataFim_formCriaEvento);
-        edtDataFim.setOnClickListener(new View.OnClickListener() {
+        edtNomeEvento = findViewById(R.id.edtNomeEvento_formCriarEvento);
+        btnCriar = findViewById(R.id.btnCriarEvento_formCriarEvento);
+        btnVoltar = findViewById(R.id.btnVoltar_formCriarEvento);
+    }
+    private void configurarComponentes(){
+        btnCriar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(validarDatas())
+                    criarEvento();
+                else
+                    Toast.makeText(v.getContext(), "Data inicio/fim inválida", Toast.LENGTH_SHORT).show();
+            }
+        });
+        btnVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });edtDataFim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mostrarEscolhaDateTime(edtDataFim);
@@ -63,25 +76,6 @@ public class FormCriarEvento extends AppCompatActivity {
                 mostrarEscolhaDateTime(edtDataInicio);
             }
         });
-        edtNomeEvento = findViewById(R.id.edtNomeEvento_formCriarEvento);
-        btnCriar = findViewById(R.id.btnCriarEvento_formCriarEvento);
-        btnVoltar = findViewById(R.id.btnVoltar_formCriarEvento);
-        btnCriar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(datasValidas())
-                    criarEvento();
-                else
-                    Toast.makeText(v.getContext(), "Data inicio/fim inválida", Toast.LENGTH_SHORT).show();
-            }
-        });
-        btnVoltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
     }
 
     private void criarEvento(){
@@ -90,6 +84,7 @@ public class FormCriarEvento extends AppCompatActivity {
         e.setDataInicio(edtDataInicio.getText().toString());
         e.setDataFim(edtDataFim.getText().toString());
         dbConnection.adicionarEvento(e);
+        Toast.makeText(this, "Evento criado com sucesso",Toast.LENGTH_SHORT).show();
         finish();
     }
 
@@ -111,7 +106,7 @@ public class FormCriarEvento extends AppCompatActivity {
         }, calendario.get(Calendar.YEAR), calendario.get(Calendar.MONTH), calendario.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    private boolean datasValidas(){
+    private boolean validarDatas(){
         String strInicio = edtDataInicio.getText().toString();
         String strFim = edtDataFim.getText().toString();
         // os 2 campos tem que estar cheios

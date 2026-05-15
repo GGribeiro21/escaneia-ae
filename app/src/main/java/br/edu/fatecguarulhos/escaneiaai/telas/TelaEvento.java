@@ -1,4 +1,4 @@
-package br.edu.fatecguarulhos.escaneiaai;
+package br.edu.fatecguarulhos.escaneiaai.telas;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import br.edu.fatecguarulhos.escaneiaai.paginas.TelaQrCode;
+import br.edu.fatecguarulhos.escaneiaai.R;
 
 public class TelaEvento extends AppCompatActivity {
     private TextView txtTituloEvento;
@@ -32,12 +32,18 @@ public class TelaEvento extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        inicializarComponentes();
+        configurarComponentes();
+    }
+    private void inicializarComponentes(){
         Intent it = getIntent();
         // coletar id do evento
         idEvento = it.getStringExtra("id");
         txtTituloEvento = findViewById(R.id.txtTituloEvento_actv_tela_evento);
         txtTituloEvento.setText(it.getStringExtra("titulo"));
         fabRetorno = findViewById(R.id.fabQrCode_telaEvento);
+    }
+    private void configurarComponentes(){
         fabRetorno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

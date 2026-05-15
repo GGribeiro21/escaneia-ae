@@ -8,7 +8,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,26 +18,8 @@ import br.edu.fatecguarulhos.escaneiaai.models.Participante;
 public class DbManager {
     private View v;
     private FirebaseDatabase database;
-    private FirebaseFirestore firestore;
-    //private DatabaseReference myRef;
     public DbManager(){
         database = FirebaseDatabase.getInstance();
-        //myRef = database.getReference();
-        /*
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String value = snapshot.getValue().toString();
-                //System.out.println("Value: " + value);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                System.out.println("Erro: " + error.toString());
-            }
-        });
-        */
-        firestore = FirebaseFirestore.getInstance();
     }
     public void adicionarEvento(Evento e){
         DatabaseReference myRef = database.getReference("eventos");
@@ -48,33 +29,12 @@ public class DbManager {
     }
 
 
-    public void lerTodos(FirebaseCallback callback) {
+    public void getAllEventos(FirebaseCallback callback) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("eventos");
-/*
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Evento> listaEventos = new ArrayList<Evento>();
-                //listaEventos.clear();
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    Evento evento = postSnapshot.getValue(Evento.class);
-                    listaEventos.add(evento);
-                }
-                callback.onCallbackForAll(listaEventos);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("Firebase", "Falha na leitura.", databaseError.toException());
-            }
-        });
-
- */
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Evento> listaEventos = new ArrayList<Evento>();
-                //listaEventos.clear();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Evento evento = postSnapshot.getValue(Evento.class);
                     listaEventos.add(evento);
@@ -95,7 +55,7 @@ public class DbManager {
         });
     }
 
-    public void lerPorId(String id, FirebaseCallback callback){
+    public void getEventoById(String id, FirebaseCallback callback){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("eventos");
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -116,18 +76,17 @@ public class DbManager {
             }
         });
     }
-    public void registrarEntradaParticipante(Evento e, Participante p) {
-
-        DatabaseReference myRef = database.getReference("eventos").child(e.getId());
-        List<Participante> participantes = e.getParticipantes();
-        participantes.add(p);
-        e.setParticipantes(participantes);
-        myRef.setValue(e);
+    public void registrarEntradaParticipante(Evento evento, Participante participante) {
+        DatabaseReference myRef = database.getReference("eventos").child(evento.getId());
+        List<Participante> participantes = evento.getParticipantes();
+        participantes.add(participante);
+        evento.setParticipantes(participantes);
+        myRef.setValue(evento);
 
     }
-    public void registrarSaidaParticipante(Evento e, Participante participante){
-        DatabaseReference myRef = database.getReference("eventos").child(e.getId());
-        List<Participante> lista = e.getParticipantes();
+    public void registrarSaidaParticipante(Evento evento, Participante participante){
+        DatabaseReference myRef = database.getReference("eventos").child(evento.getId());
+        List<Participante> lista = evento.getParticipantes();
         for(int i = 0; i < lista.size(); i++){
             Participante p = lista.get(i);
                 if(
@@ -138,8 +97,8 @@ public class DbManager {
                     lista.get(i).setSaida(true);
                 }
             }
-        e.setParticipantes(lista);
-        myRef.setValue(e);
+        evento.setParticipantes(lista);
+        myRef.setValue(evento);
         }
     }
 

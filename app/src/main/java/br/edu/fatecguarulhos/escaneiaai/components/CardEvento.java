@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.R;
-import br.edu.fatecguarulhos.escaneiaai.TelaEvento;
+import br.edu.fatecguarulhos.escaneiaai.telas.TelaEvento;
 
 public class CardEvento extends ConstraintLayout {
     private String titulo, corpo;
