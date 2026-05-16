@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Evento {
-    private String titulo, id;
+    private String titulo, id, idCriador;
     private List<Participante> participantes = new ArrayList<>();
     private String dataInicio, dataFim;
     public Evento(String titulo){
@@ -56,5 +56,13 @@ public class Evento {
 
     public void setDataFim(String dataFim) {
         this.dataFim = dataFim;
+    }
+
+    public String getIdCriador() {
+        return idCriador;
+    }
+
+    public void setIdCriador(String idCriador) {
+        this.idCriador = idCriador;
     }
 }
