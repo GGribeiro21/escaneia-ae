@@ -38,6 +38,9 @@ public class ParticipanteDao {
         int idParticipante = encontrarParticipante(lista, participante);
         boolean entradaRegistrada = idParticipante != -1;
         if(entradaRegistrada){
+            // participante registrado, porém com saida já escaneada
+            if(lista.get(idParticipante).isSaida())
+                throw new IllegalArgumentException("Saída ja registrada");
             lista.get(idParticipante).setSaida(true);
             evento.setParticipantes(lista);
             myRef.setValue(evento);
