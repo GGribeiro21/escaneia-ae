@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.models.Participante;
 import br.edu.fatecguarulhos.escaneiaai.paginas.PaginaListaEventos;
 import br.edu.fatecguarulhos.escaneiaai.paginas.PaginaEventos;
+import br.edu.fatecguarulhos.escaneiaai.telas.TelaRegistrarParticipante;
 import br.edu.fatecguarulhos.escaneiaai.util.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
 
@@ -101,25 +103,35 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onCallBackByid(Evento e) {
-                            registrarLeituraQC(e, msgFatiada[1]);
+                            resultLeituraQC(e, msgFatiada[1]);
                         }
                     });
         }
     }
-    public void registrarLeituraQC(Evento e, String tipoQrCode){
+    public void resultLeituraQC(Evento e, String tipoQrCode){
         Participante p = new Participante();
         p.setNome("TesteEntrada");
         p.setEmail("email1");
         p.setRa("123");
         ParticipanteDao dbConnection = new ParticipanteDao();
+
         if(tipoQrCode.equals("entrada"))
-            dbConnection.registrarEntradaParticipante(e, p);
+            //dbConnection.registrarEntradaParticipante(e, p);
+            formRegistrarCliente(e,true);
         else if(tipoQrCode.equals("saida"))
-            dbConnection.registrarSaidaParticipante(e, p);
+            formRegistrarCliente(e,false);
+        //    dbConnection.registrarSaidaParticipante(e, p);
         else
             Toast.makeText(this
                             ,"Leitura inválida tente novamente"
                             , Toast.LENGTH_SHORT)
                     .show();
+    }
+    private void formRegistrarCliente(Evento evento, boolean isEntrada){
+        Intent it = new Intent(this, TelaRegistrarParticipante.class);
+        String jsonEvento = new Gson().toJson(evento);
+        it.putExtra("eventoJson",jsonEvento);
+        it.putExtra("isEntrada", isEntrada);
+        startActivity(it);
     }
 }

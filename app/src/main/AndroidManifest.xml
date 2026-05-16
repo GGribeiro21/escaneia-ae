@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents">
         <activity
+            android:name=".telas.TelaRegistrarParticipante"
+            android:exported="false" />
+        <activity
             android:name=".telas.TelaQrCode"
             android:exported="false" />
         <activity
