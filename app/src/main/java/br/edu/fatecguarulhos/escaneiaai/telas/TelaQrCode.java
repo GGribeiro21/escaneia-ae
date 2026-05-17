@@ -30,18 +30,23 @@ public class TelaQrCode extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        inicializarValores();
         inicializarComponentes();
         configurarComponentes();
     }
-    private void inicializarComponentes(){
+
+    private void inicializarValores() {
         Intent it =  getIntent();
         idEvento = it.getStringExtra("id");
+    }
+
+    private void inicializarComponentes(){
         imgQrCode = findViewById(R.id.imgvQrCode);
         btnQCEntrada = findViewById(R.id.btnQrCodeEntrada_telaQrCode);
         btnQCSaida = findViewById(R.id.btnQrCodeSaida_telaQrCode);
-        getQrCodeEntrada();
     }
     private void configurarComponentes(){
+        getQrCodeEntrada();
         btnQCEntrada.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -16,7 +16,6 @@ import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.interfaces.Imprimivel;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 //import br.edu.fatecguarulhos.escaneiaai.util.DbManager;
-import br.edu.fatecguarulhos.escaneiaai.util.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.util.ImpressoraTermica;
 import br.edu.fatecguarulhos.escaneiaai.telas.TelaCriarEvento;
 

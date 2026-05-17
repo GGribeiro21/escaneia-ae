@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents" >
         <activity
-            android:name=".util.CameraLeitorCode"
+            android:name=".telas.CameraLeitorCode"
             android:exported="false" />
         <activity
             android:name=".telas.TelaRegistrarParticipante"

@@ -1,7 +1,6 @@
 package br.edu.fatecguarulhos.escaneiaai;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -10,7 +9,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -20,25 +18,14 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
-import com.dantsu.escposprinter.EscPosPrinter;
-import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.gson.Gson;
 
-import java.util.List;
-
-import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
-import br.edu.fatecguarulhos.escaneiaai.dao.ParticipanteDao;
 import br.edu.fatecguarulhos.escaneiaai.interfaces.Imprimivel;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
-import br.edu.fatecguarulhos.escaneiaai.models.Participante;
 import br.edu.fatecguarulhos.escaneiaai.paginas.PaginaListaEventos;
 import br.edu.fatecguarulhos.escaneiaai.paginas.PaginaEventos;
-import br.edu.fatecguarulhos.escaneiaai.telas.TelaRegistrarParticipante;
-import br.edu.fatecguarulhos.escaneiaai.util.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.util.ImpressoraTermica;
-import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
@@ -93,30 +80,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    // Resultado da leitura do QR code na tela "HomeFragment"
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        String msgQrCode = QrCodeManager.getResultadoLeitor(requestCode, resultCode, data);
-        // dividir o id[0] do tipo de qr code[1]
-        String[] msgFatiada = msgQrCode.split("/type=");
-        if(msgQrCode == null){
-            super.onActivityResult(requestCode, resultCode, data);
-        } else {
-            EventoDao dbConnection = new EventoDao();
-            dbConnection.getEventoById(
-                    msgFatiada[0],
-                    // garantir q estejam sincronos
-                    new FirebaseCallback() {
-                        @Override
-                        public void onCallbackForAll(List<Evento> lista) { }
-
-                        @Override
-                        public void onCallBackByid(Evento e) {
-                            registrarLeituraQC(e, msgFatiada[1]);
-                        }
-                    });
-        }
-    }
     public void imprimir(View view){
         try {
             if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.S && ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
@@ -137,23 +100,4 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         }
-    public void registrarLeituraQC(Evento e, String tipoQrCode){
-        Participante p = new Participante();
-        p.setNome("TesteEntrada");
-        p.setEmail("email1");
-        p.setRa("123");
-        ParticipanteDao dbConnection = new ParticipanteDao();
-        /*
-        if(tipoQrCode.equals("entrada"))
-            dbConnection.registrarEntradaParticipante(e, p);
-        else if(tipoQrCode.equals("saida"))
-            dbConnection.registrarSaidaParticipante(e, p);
-        else
-            Toast.makeText(this
-                            ,"Leitura inválida tente novamente"
-                            , Toast.LENGTH_SHORT)
-                    .show();
-
-         */
-    }
 }

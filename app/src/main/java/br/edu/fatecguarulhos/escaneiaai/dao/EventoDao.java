@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
-import br.edu.fatecguarulhos.escaneiaai.util.FirebaseCallback;
+import br.edu.fatecguarulhos.escaneiaai.interfaces.FirebaseCallback;
 
 public class EventoDao {
     private FirebaseDatabase database;

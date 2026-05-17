@@ -1,4 +1,4 @@
-package br.edu.fatecguarulhos.escaneiaai.util;
+package br.edu.fatecguarulhos.escaneiaai.interfaces;
 
 import java.util.List;
 

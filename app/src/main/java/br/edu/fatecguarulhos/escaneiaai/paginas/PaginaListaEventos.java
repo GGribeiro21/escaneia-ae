@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +18,8 @@ import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.components.CardEvento;
-import br.edu.fatecguarulhos.escaneiaai.util.CameraLeitorCode;
-import br.edu.fatecguarulhos.escaneiaai.util.FirebaseCallback;
-import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
+import br.edu.fatecguarulhos.escaneiaai.telas.CameraLeitorCode;
+import br.edu.fatecguarulhos.escaneiaai.interfaces.FirebaseCallback;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +39,6 @@ public class PaginaListaEventos extends Fragment {
 
     private FloatingActionButton btnQrCode;
     private EventoDao dbConnection;
-    private List<Evento> eventos = new ArrayList<>();
     private LinearLayout ll;
 
     public PaginaListaEventos() {
