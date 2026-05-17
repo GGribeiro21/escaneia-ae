@@ -8,10 +8,14 @@ import com.google.type.DateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.fatecguarulhos.escaneiaai.interfaces.Imprimivel;
+import br.edu.fatecguarulhos.escaneiaai.util.ImpressoraTermica;
+import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
+
 public class Evento {
     private String titulo, id, idCriador;
     private List<Participante> participantes = new ArrayList<>();
-    private DateTime dataInicio, dataFim;
+    //private DateTime dataInicio, dataFim;
     private Bitmap qrCode;
 
     public Bitmap getQrCode() {
@@ -30,7 +34,8 @@ public class Evento {
     }
 
     public Evento() {
-        qrCode = QrCodeManager.gerarQrCode(id);
+        if(id != null)
+            qrCode = QrCodeManager.gerarQrCode(id);
     }
 
     public String getTitulo() {
@@ -69,7 +74,6 @@ public class Evento {
         return dataFim;
     }
     private void gerarQrCode(){}
-    public void setDataFim(DateTime dataFim) {
 
     public void setDataFim(String dataFim) {
         this.dataFim = dataFim;
@@ -81,14 +85,14 @@ public class Evento {
 
     public void setIdCriador(String idCriador) {
         this.idCriador = idCriador;
+    }
     private String imagemFormatadaParaImpressao(ImpressoraTermica impressora){
         return "[C]<img>"+ PrinterTextParserImg.bitmapToHexadecimalString(impressora.getImpressora(), qrCode) + "</img>\n" ;
     }
-    @Override
+    //@Override
     public String dadosASeremImpressos(ImpressoraTermica impressora) {
-        return TITULO_APP +
+        return Imprimivel.TITULO_APP +
                 "[L]" + titulo +
-
-                DATA_E_HORA_IMPRESSAO;
+                Imprimivel.DATA_E_HORA_IMPRESSAO;
     }
 }

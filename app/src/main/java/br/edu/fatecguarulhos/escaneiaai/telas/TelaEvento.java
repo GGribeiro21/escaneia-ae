@@ -13,15 +13,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import br.edu.fatecguarulhos.escaneiaai.R;
+import br.edu.fatecguarulhos.escaneiaai.adapter.ParticipanteAdapter;
+import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
+import br.edu.fatecguarulhos.escaneiaai.models.Evento;
+import br.edu.fatecguarulhos.escaneiaai.models.Participante;
+import br.edu.fatecguarulhos.escaneiaai.util.FirebaseCallback;
 
 public class TelaEvento extends AppCompatActivity {
     private TextView txtTituloEvento;
     private FloatingActionButton fabRetorno;
-    private String idEvento;
+    private Evento evento;
+    private RecyclerView rvParticipantes;
+    private ParticipanteAdapter adapter;
+    private ArrayList<Participante> participantesArrayList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,16 +48,25 @@ public class TelaEvento extends AppCompatActivity {
         });
         inicializarComponentes();
         configurarComponentes();
+        inicializarCardView();
+    }
+
+    private void inicializarCardView() {
+        rvParticipantes.setLayoutManager(new LinearLayoutManager(this));
+        participantesArrayList = new ArrayList<>();
+        adapter = new ParticipanteAdapter(this, participantesArrayList);
+        participantesArrayList.addAll(evento.getParticipantes());
+        rvParticipantes.setAdapter(adapter);
     }
     private void inicializarComponentes(){
         Intent it = getIntent();
-        // coletar id do evento
-        idEvento = it.getStringExtra("id");
+        evento = new Gson().fromJson(it.getStringExtra("eventoJson"), Evento.class);
         txtTituloEvento = findViewById(R.id.txtTituloEvento_actv_tela_evento);
-        txtTituloEvento.setText(it.getStringExtra("titulo"));
         fabRetorno = findViewById(R.id.fabQrCode_telaEvento);
+        rvParticipantes = findViewById(R.id.rvPresentes);
     }
     private void configurarComponentes(){
+        txtTituloEvento.setText(evento.getTitulo());
         fabRetorno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +77,8 @@ public class TelaEvento extends AppCompatActivity {
     private void telaQrCode(){
         Intent it  = new Intent(this, TelaQrCode.class);
         // enviar id para uso na criação do qrCode
-        it.putExtra("id",idEvento);
+        String id = evento.getId();
+        it.putExtra("id", id);
         startActivity(it);
     }
     // appbar
