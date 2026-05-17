@@ -2,7 +2,6 @@ package br.edu.fatecguarulhos.escaneiaai.paginas;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +11,12 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import java.util.List;
-
 import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.util.DbManager;
 import br.edu.fatecguarulhos.escaneiaai.util.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.util.ImpressoraTermica;
+import br.edu.fatecguarulhos.escaneiaai.telas.TelaCriarEvento;
 
 public class PaginaEventos extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -29,7 +27,6 @@ public class PaginaEventos extends Fragment {
     private String mParam2;
     private Button btnAdd, btnLer, buttonImpressao;
     private TextView textIdDispositivo;
-    private DbManager dbConnection;
 
     public PaginaEventos(){};
 
@@ -42,7 +39,6 @@ public class PaginaEventos extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         */
-        dbConnection = new DbManager();
     }
 
     @Override
@@ -51,13 +47,25 @@ public class PaginaEventos extends Fragment {
         // Inflate the layout for this fragment
         assert container != null;
         View v = inflater.inflate(R.layout.fragment_perfil, container, false);
+        inicializarComponentes(v);
+        configurarComponentes();
+        //String idDispositivo = Settings.Secure.getString(v.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        //textIdDispositivo = v.findViewById(R.id.id_dispositivo);
+        //textIdDispositivo.setText("Id do dispositivo:" + idDispositivo);
+        return v;
+    }
+    private void inicializarComponentes(View v){
         btnAdd = v.findViewById(R.id.btnTempAddEvento);
+    }
+    private void configurarComponentes(){
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                execBtnAdd(v);
+                Intent it = new Intent(getContext(), TelaCriarEvento.class);
+                startActivity(it);
             }
         });
+<<<<<<< HEAD
         String idDispositivo = Settings.Secure.getString(v.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         buttonImpressao = v.findViewById(R.id.button_impressao);
         /*buttonImpressao.setOnClickListener(new View.OnClickListener() {
@@ -83,4 +91,7 @@ public class PaginaEventos extends Fragment {
         }
         }
 
+=======
+    }
+>>>>>>> refs/remotes/origin/main
 }

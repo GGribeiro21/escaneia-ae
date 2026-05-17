@@ -15,6 +15,7 @@ import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
 public class Evento implements Imprimivel {
     private String titulo, id;
     private List<Participante> participantes = new ArrayList<>();
+<<<<<<< HEAD
     private DateTime dataInicio, dataFim;
     private Bitmap qrCode;
 
@@ -26,6 +27,9 @@ public class Evento implements Imprimivel {
         this.qrCode = qrCode;
     }
 
+=======
+    private String dataInicio, dataFim;
+>>>>>>> refs/remotes/origin/main
     public Evento(String titulo){
 
         qrCode = QrCodeManager.gerarQrCode(id);
@@ -60,19 +64,21 @@ public class Evento implements Imprimivel {
         this.id = id;
     }
 
-    public DateTime getDataInicio() {
+    public String getDataInicio() {
         return dataInicio;
     }
 
-    public void setDataInicio(DateTime dataInicio) {
+    public void setDataInicio(String dataInicio) {
         this.dataInicio = dataInicio;
     }
 
-    public DateTime getDataFim() {
+    public String getDataFim() {
         return dataFim;
     }
     private void gerarQrCode(){}
     public void setDataFim(DateTime dataFim) {
+
+    public void setDataFim(String dataFim) {
         this.dataFim = dataFim;
     }
     private String imagemFormatadaParaImpressao(ImpressoraTermica impressora){

@@ -1,4 +1,4 @@
-package br.edu.fatecguarulhos.escaneiaai.paginas;
+package br.edu.fatecguarulhos.escaneiaai.telas;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,26 +30,32 @@ public class TelaQrCode extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        inicializarComponentes();
+        configurarComponentes();
+    }
+    private void inicializarComponentes(){
         Intent it =  getIntent();
         idEvento = it.getStringExtra("id");
         imgQrCode = findViewById(R.id.imgvQrCode);
-        getQrCodeEntrada();
         btnQCEntrada = findViewById(R.id.btnQrCodeEntrada_telaQrCode);
+        btnQCSaida = findViewById(R.id.btnQrCodeSaida_telaQrCode);
+        getQrCodeEntrada();
+    }
+    private void configurarComponentes(){
         btnQCEntrada.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getQrCodeEntrada();
             }
         });
-        btnQCSaida = findViewById(R.id.btnQrCodeSaida_telaQrCode);
         btnQCSaida.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getQrCodeSaida();
             }
         });
-
     }
+
     private void getQrCodeSaida(){
         Bitmap qrCode = QrCodeManager.gerarQrCode(idEvento + "/type=saida");
         imgQrCode.setImageBitmap(qrCode);

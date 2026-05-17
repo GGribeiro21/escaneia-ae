@@ -11,7 +11,7 @@ public class EventoOld {
     private LocalDateTime previsaoFim;
     private boolean cancelado;
     private String descricao;
-    private Palestrante palestrante;
+    private PalestranteOld palestrante;
     public boolean eventoIniciado(){
         return dataInicio != null;
     }

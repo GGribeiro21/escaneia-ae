@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".paginas.FormCriarEvento">
+    tools:context=".telas.TelaCriarEvento">
 
     <LinearLayout
         android:layout_width="409dp"
@@ -33,5 +33,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Voltar" />
+
+        <EditText
+            android:id="@+id/edtdataInicio_formCriaEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="date"
+            android:focusable="false"
+            android:clickable="true"
+            android:hint="Data inicio"/>
+
+        <EditText
+            android:id="@+id/edtdataFim_formCriaEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="date"
+            android:focusable="false"
+            android:clickable="true"
+            android:hint="Data fim"/>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

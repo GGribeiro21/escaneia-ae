@@ -14,13 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents">
         <activity
-            android:name=".paginas.TelaQrCode"
+            android:name=".telas.TelaQrCode"
             android:exported="false" />
         <activity
-            android:name=".paginas.FormCriarEvento"
+            android:name=".telas.TelaCriarEvento"
             android:exported="false" />
         <activity
-            android:name=".TelaEvento"
+            android:name=".telas.TelaEvento"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
