@@ -23,5 +23,12 @@
             android:layout_height="wrap_content"
             android:text="TEMPORARIO add evento" />
 
+        <Button
+            android:id="@+id/button_impressao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Testar impressão"
+            android:onClick="imprimir"/>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

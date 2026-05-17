@@ -1,21 +1,39 @@
 package br.edu.fatecguarulhos.escaneiaai.models;
 
-import com.google.type.DateTime;
+import android.graphics.Bitmap;
 
-import org.checkerframework.checker.units.qual.A;
+import com.dantsu.escposprinter.textparser.PrinterTextParserImg;
+import com.google.type.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Evento {
+import br.edu.fatecguarulhos.escaneiaai.interfaces.Imprimivel;
+import br.edu.fatecguarulhos.escaneiaai.util.ImpressoraTermica;
+import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
+
+public class Evento implements Imprimivel {
     private String titulo, id;
     private List<Participante> participantes = new ArrayList<>();
     private DateTime dataInicio, dataFim;
+    private Bitmap qrCode;
+
+    public Bitmap getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(Bitmap qrCode) {
+        this.qrCode = qrCode;
+    }
+
     public Evento(String titulo){
+
+        qrCode = QrCodeManager.gerarQrCode(id);
         this.titulo = titulo;
     }
 
     public Evento() {
+        qrCode = QrCodeManager.gerarQrCode(id);
     }
 
     public String getTitulo() {
@@ -53,8 +71,18 @@ public class Evento {
     public DateTime getDataFim() {
         return dataFim;
     }
-
+    private void gerarQrCode(){}
     public void setDataFim(DateTime dataFim) {
         this.dataFim = dataFim;
+    }
+    private String imagemFormatadaParaImpressao(ImpressoraTermica impressora){
+        return "[C]<img>"+ PrinterTextParserImg.bitmapToHexadecimalString(impressora.getImpressora(), qrCode) + "</img>\n" ;
+    }
+    @Override
+    public String dadosASeremImpressos(ImpressoraTermica impressora) {
+        return TITULO_APP +
+                "[L]" + titulo +
+
+                DATA_E_HORA_IMPRESSAO;
     }
 }
