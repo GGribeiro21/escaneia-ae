@@ -31,10 +31,11 @@
             android:id="@+id/txtTituloEvento_actv_tela_evento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="Participantes" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPresentes"
             android:layout_width="match_parent"
-            android:layout_height="0dp" />
+            android:layout_height="97dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

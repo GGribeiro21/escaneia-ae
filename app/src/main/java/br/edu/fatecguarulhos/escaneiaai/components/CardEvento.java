@@ -11,12 +11,14 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.gson.Gson;
+
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.telas.TelaEvento;
 
 public class CardEvento extends ConstraintLayout {
-    private String titulo, corpo;
+    private String titulo, corpo, jsonEvento;
     private TextView textTitulo, textCorpo;
     private Evento evento;
     private CardView cardView;
@@ -32,18 +34,22 @@ public class CardEvento extends ConstraintLayout {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.card_evento, this, true);
         CardView card = findViewById(R.id.cardView_evento);
+        //jsonEvento =
         card.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 // definir ação ao clicar em um cartão de evento
                 Intent it = new Intent(v.getContext() , TelaEvento.class);
-                it.putExtra("titulo", titulo);
-                it.putExtra("id",evento.getId());
+                //it.putExtra("titulo", titulo);
+                //it.putExtra("id",evento.getId());
+                //String jsonEvento = new Gson().toJson(evento);
+                it.putExtra("eventoJson", jsonEvento);
                 v.getContext().startActivity(it);
             }
         });
     }
     public void alterarConteudo(Evento e){
+        jsonEvento = new Gson().toJson(e);
         evento = e;
         titulo = e.getTitulo();
         corpo = e.getDataInicio() + " < - > " + e.getDataFim();
