@@ -38,11 +38,16 @@ public class TelaCriarEvento extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        inicializarValores();
         inicializarComponentes();
         configurarComponentes();
     }
-    private void inicializarComponentes(){
+
+    private void inicializarValores() {
         dbConnection = new EventoDao();
+    }
+
+    private void inicializarComponentes(){
         edtDataInicio = findViewById(R.id.edtdataInicio_formCriaEvento);
         edtDataFim = findViewById(R.id.edtdataFim_formCriaEvento);
         edtNomeEvento = findViewById(R.id.edtNomeEvento_formCriarEvento);
@@ -53,8 +58,10 @@ public class TelaCriarEvento extends AppCompatActivity {
         btnCriar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(validarDatas())
-                    criarEvento();
+                if(validarDatas()){
+                    Evento e = criarEvento();
+                    registrarEvento(e);
+                }
                 else
                     Toast.makeText(v.getContext(), "Data inicio/fim inválida", Toast.LENGTH_SHORT).show();
             }
@@ -64,11 +71,11 @@ public class TelaCriarEvento extends AppCompatActivity {
             public void onClick(View v) {
                 finish();
             }
-        });edtDataFim.setOnClickListener(new View.OnClickListener() {
+        });
+        edtDataFim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mostrarEscolhaDateTime(edtDataFim);
-
             }
         });
         edtDataInicio.setOnClickListener(new View.OnClickListener() {
@@ -79,12 +86,15 @@ public class TelaCriarEvento extends AppCompatActivity {
         });
     }
 
-    private void criarEvento(){
+    private Evento criarEvento(){
         Evento e = new Evento();
         e.setTitulo(edtNomeEvento.getText().toString());
         e.setDataInicio(edtDataInicio.getText().toString());
         e.setDataFim(edtDataFim.getText().toString());
         e.setIdCriador(getIdCelular());
+        return e;
+    }
+    private void registrarEvento(Evento e){
         dbConnection.adicionarEvento(e);
         Toast.makeText(this, "Evento criado com sucesso",Toast.LENGTH_SHORT).show();
         finish();
@@ -154,7 +164,6 @@ public class TelaCriarEvento extends AppCompatActivity {
     // para definir o criador do evento
     private String getIdCelular(){
         return Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-
     }
 
 }

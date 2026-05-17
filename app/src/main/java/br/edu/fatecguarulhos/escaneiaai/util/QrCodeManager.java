@@ -14,7 +14,7 @@ import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
 public class QrCodeManager {
-    public static void lerQrCode(IntentIntegrator intentIntegrator){
+    public static void abrirLeitor(IntentIntegrator intentIntegrator){
         intentIntegrator.setOrientationLocked(false);
         intentIntegrator.setPrompt("Escaneie o QR CODE");
         intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);

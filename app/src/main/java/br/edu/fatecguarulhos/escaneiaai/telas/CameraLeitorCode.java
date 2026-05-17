@@ -1,4 +1,4 @@
-package br.edu.fatecguarulhos.escaneiaai.util;
+package br.edu.fatecguarulhos.escaneiaai.telas;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,9 +18,9 @@ import java.util.List;
 
 import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
+import br.edu.fatecguarulhos.escaneiaai.interfaces.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
-import br.edu.fatecguarulhos.escaneiaai.models.Participante;
-import br.edu.fatecguarulhos.escaneiaai.telas.TelaRegistrarParticipante;
+import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
 
 public class CameraLeitorCode extends AppCompatActivity {
 
@@ -37,7 +37,7 @@ public class CameraLeitorCode extends AppCompatActivity {
         openQrCode();
     }
     public void openQrCode(){
-        QrCodeManager.lerQrCode(new IntentIntegrator(this));
+        QrCodeManager.abrirLeitor(new IntentIntegrator(this));
     }
     // Resultado da leitura do QR code na tela "HomeFragment"
     @Override
@@ -50,8 +50,8 @@ public class CameraLeitorCode extends AppCompatActivity {
         } else {
             // dividir o id[0] do tipo de qr code[1]
             String[] msgFatiada = msgQrCode.split("/type=");
-            EventoDao dbConnection = new EventoDao();
-            dbConnection.getEventoById(
+            EventoDao eventoConnection = new EventoDao();
+            eventoConnection.getEventoById(
                     msgFatiada[0],
                     // garantir q estejam sincronos
                     new FirebaseCallback() {
@@ -79,7 +79,6 @@ public class CameraLeitorCode extends AppCompatActivity {
     }
     private void formRegistrarCliente(String jsonEvento, boolean isEntrada){
         Intent it = new Intent(this, TelaRegistrarParticipante.class);
-
         it.putExtra("eventoJson",jsonEvento);
         it.putExtra("isEntrada", isEntrada);
         startActivity(it);
