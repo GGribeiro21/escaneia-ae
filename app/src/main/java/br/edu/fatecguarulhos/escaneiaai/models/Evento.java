@@ -13,7 +13,8 @@ import br.edu.fatecguarulhos.escaneiaai.util.ImpressoraTermica;
 import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
 
 public class Evento {
-    private String titulo, id, idCriador,dataInicio, dataFim;
+    private String titulo, id, idCriador;
+    private String dataInicio, dataFim;
     private List<Participante> participantes = new ArrayList<>();
     //private DateTime dataInicio, dataFim,
     private Bitmap qrCode;

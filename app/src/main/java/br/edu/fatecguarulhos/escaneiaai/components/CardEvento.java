@@ -13,6 +13,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.gson.Gson;
 
+import java.time.LocalDateTime;
+
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.telas.TelaEvento;
@@ -31,6 +33,12 @@ public class CardEvento extends ConstraintLayout {
         inicializarComponentes(context);
     }
     private void inicializarComponentes(Context context){
+        LocalDateTime dt1 = LocalDateTime.of(2023, 10, 1, 10, 0);
+        LocalDateTime dt2 = LocalDateTime.now();
+
+        if (dt1.isBefore(dt2)) {
+            System.out.println("dt1 is in the past");
+        }
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.card_evento, this, true);
         CardView card = findViewById(R.id.cardView_evento);
