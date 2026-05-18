@@ -27,9 +27,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
+import br.edu.fatecguarulhos.escaneiaai.util.ImpressoraTermica;
 import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
 
 public class TelaQrCode extends AppCompatActivity {
@@ -91,25 +95,46 @@ public class TelaQrCode extends AppCompatActivity {
         Bitmap qrCode = QrCodeManager.gerarQrCode(idEvento + "/type=entrada");
         imgQrCode.setImageBitmap(qrCode);
     }
-    public void imprimirQrCode(View view){
+    public void imprimirQrCodeEntrada(View view){
         try {
-            EscPosPrinter printer = new EscPosPrinter(BluetoothPrintersConnections.selectFirstPaired(),203,48f, 32);
-            printer.printFormattedText(
-                    "[C]<b><font size='big'>Escaneia Ae</font></b>\n" +
+
+            Toast.makeText(this, "Imprimindo...", Toast.LENGTH_SHORT).show();
+            ImpressoraTermica impressora = new ImpressoraTermica(this, this);
+            String texto =
+                    "[C]<b><font size='big'>Escaneia Ae</font></b>\n \n" +
                             "[C]"+ evento.getTitulo() +"\n" +
-                            "[L]Escaneie esse codigo\n"
-                            +"[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(printer,  QrCodeManager.gerarQrCode(idEvento + "/type=saida"))+"</img>\n");
+                            "[L]Entrada do evento\n"
+                            +"[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(impressora.getImpressora(),  QrCodeManager.gerarQrCode(idEvento + "/type=entrada"))+"</img>\n\n"
+                            +"[L]Impresso em: " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()) + "\n";
+            impressora.imprimir(texto);
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(this, evento.getTitulo(), Toast.LENGTH_SHORT).show();
+    }
+
+
+    public void imprimirQrCodeSaida(View view){
+        try {
+
+            Toast.makeText(this, "Imprimindo...", Toast.LENGTH_SHORT).show();
+            ImpressoraTermica impressora = new ImpressoraTermica(this, this);
+            String texto =
+                    "[C]<b><font size='big'>Escaneia Ae</font></b>\n \n" +
+                            "[C]"+ evento.getTitulo() +"\n" +
+                            "[L]Saida do evento\n"
+                            +"[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(impressora.getImpressora(),  QrCodeManager.gerarQrCode(idEvento + "/type=saida"))+"</img>\n\n"+
+                            "[L]Impresso em: " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()) + "\n";
+            impressora.imprimir(texto);
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
     public void voltar(View view){
         finish();
     }
     public void buscarEvento(){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("eventos");
-        reference.child("-Ost-Ap6lPQqDmAUfpoe").get().addOnCompleteListener(task ->{
+        reference.child(idEvento).get().addOnCompleteListener(task ->{
             if (task.isSuccessful() && task.getResult().exists()){
                 DataSnapshot snapshot = task.getResult();
                 Evento evento = snapshot.getValue(Evento.class);

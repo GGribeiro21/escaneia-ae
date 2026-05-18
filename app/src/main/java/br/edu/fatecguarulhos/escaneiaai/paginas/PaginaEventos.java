@@ -75,7 +75,7 @@ public class PaginaEventos extends Fragment {
         try {
             Evento evento = new Evento("Evento de teste");
             ImpressoraTermica impressora = new ImpressoraTermica(getActivity(), getContext());
-            impressora.imprimirComPermissao((Imprimivel) evento);
+
         } catch (Exception e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
