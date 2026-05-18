@@ -15,6 +15,13 @@
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="1dp">
 
+        <TextView
+            android:id="@+id/txtTituloEvento_actv_tela_evento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Participantes"
+            android:textSize="20sp" />
+
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -28,10 +35,11 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <TextView
-            android:id="@+id/txtTituloEvento_actv_tela_evento"
+            android:id="@+id/textView7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Participantes" />
+            android:text="Participantes"
+            android:textSize="16sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPresentes"
