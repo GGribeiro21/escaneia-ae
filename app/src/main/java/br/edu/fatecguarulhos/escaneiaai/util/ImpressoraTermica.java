@@ -56,7 +56,6 @@ public class ImpressoraTermica {
         }
     }
     public void imprimirComPermissao(Imprimivel imprimivel) {
-
         try {
             EscPosPrinter impressora2 = new EscPosPrinter(BluetoothPrintersConnections.selectFirstPaired(), 203, 48f, 32);
             impressora2.printFormattedText("[C]<b>Teste</b>\n" +
@@ -64,7 +63,7 @@ public class ImpressoraTermica {
         } catch (Exception e) {
 
         }
-        }
+    }
     public void imprimir(Imprimivel imprimivel) throws EscPosEncodingException, EscPosBarcodeException, EscPosParserException, EscPosConnectionException {
         requisitarPermissaoBluetooth(imprimivel);
     }

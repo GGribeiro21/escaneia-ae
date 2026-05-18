@@ -6,17 +6,13 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
-import com.google.gson.Gson;
-
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.telas.TelaEvento;
-
+import com.google.gson.Gson;
 public class CardEvento extends ConstraintLayout {
     private String titulo, corpo, jsonEvento;
     private TextView textTitulo, textCorpo;
@@ -49,6 +45,7 @@ public class CardEvento extends ConstraintLayout {
         });
     }
     public void alterarConteudo(Evento e){
+
         jsonEvento = new Gson().toJson(e);
         evento = e;
         titulo = e.getTitulo();
