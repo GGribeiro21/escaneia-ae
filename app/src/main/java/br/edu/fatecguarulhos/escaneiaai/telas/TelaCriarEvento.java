@@ -15,7 +15,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.type.DateTime;
+
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -125,6 +129,9 @@ public class TelaCriarEvento extends AppCompatActivity {
     }
 
     private boolean validarDatas(){
+        if(edtDataFim.getText().toString().equals("") || edtDataInicio.getText().toString().equals(""))
+            return false;
+
         String strInicio = edtDataInicio.getText().toString();
         String strFim = edtDataFim.getText().toString();
         // os 2 campos tem que estar cheios
@@ -166,6 +173,8 @@ public class TelaCriarEvento extends AppCompatActivity {
             }
         }
         return false;
+
+
     }
     // para definir o criador do evento
     private String getIdCelular(){
