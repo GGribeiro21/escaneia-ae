@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,15 +21,19 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.edu.fatecguarulhos.escaneiaai.R;
+import br.edu.fatecguarulhos.escaneiaai.TelaEditarEvento;
 import br.edu.fatecguarulhos.escaneiaai.adapter.ParticipanteAdapter;
+import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
+import br.edu.fatecguarulhos.escaneiaai.interfaces.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.models.Participante;
 
 public class TelaEvento extends AppCompatActivity {
-    private TextView txtTituloEvento;
-    private FloatingActionButton fabQrCode;
+    private TextView txtTituloEvento, txtLocalEvento, txtDataEvento, txtDescricaoEvento;
+    private FloatingActionButton fabQrCode, fabEditarEvento;
     private Evento evento;
     private RecyclerView rvParticipantes;
     private ParticipanteAdapter adapter;
@@ -56,15 +61,32 @@ public class TelaEvento extends AppCompatActivity {
 
     private void inicializarComponentes(){
         txtTituloEvento = findViewById(R.id.txtTituloEvento_actv_tela_evento);
+        txtDataEvento = findViewById(R.id.txtHorarioEvento_telaEvento);
+        txtLocalEvento = findViewById(R.id.txtLocalEvento_telaEvento);
+        txtDescricaoEvento = findViewById(R.id.txtDescricaoEvento_telaEvento);
         fabQrCode = findViewById(R.id.fabQrCode_telaEvento);
+        fabEditarEvento = findViewById(R.id.fabEditarEvento_telaEvento);
         rvParticipantes = findViewById(R.id.rvPresentes);
     }
     private void configurarComponentes(){
         txtTituloEvento.setText(evento.getTitulo());
+        txtDataEvento.setText("Inicio: " + evento.getDataInicio() + "\nFim: " + evento.getDataFim());
+        txtLocalEvento.setText("Local: " + evento.getLocal());
+
+        if(evento.getDescricao() != null && !(evento.getDescricao().equals("")))
+            txtDescricaoEvento.setText("Descrição: " + evento.getDescricao());
+        else
+            txtDescricaoEvento.setText("Descrição: Sem descricao");
         fabQrCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 abrirTelaQrCode();
+            }
+        });
+        fabEditarEvento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                telaEditarEvento();
             }
         });
     }
@@ -92,6 +114,12 @@ public class TelaEvento extends AppCompatActivity {
         return true;
     }
 
+    private void telaEditarEvento(){
+        String eventoJson = new Gson().toJson(evento);
+        Intent it = new Intent(this, TelaEditarEvento.class);
+        it.putExtra("jsonEvento", eventoJson);
+        startActivity(it);
+    }
 
     public void voltar(View view){
         finish();
@@ -99,5 +127,31 @@ public class TelaEvento extends AppCompatActivity {
 
     public void voltar(MenuItem menuItem){
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventoDao eventoDao = new EventoDao();
+        String idEvento = evento.getId();
+        eventoDao.getEventoById(idEvento, new FirebaseCallback() {
+            @Override
+            public void onCallbackForAll(List<Evento> lista) {
+
+            }
+
+            @Override
+            public void onCallBackByid(Evento e) {
+                evento = e;
+                if(evento != null){
+                    inicializarComponentes();
+                    configurarComponentes();
+                    gerarListaCardParticipantes();
+                } else {
+                    Toast.makeText(TelaEvento.this,"Evento não encontrado", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        });
     }
 }

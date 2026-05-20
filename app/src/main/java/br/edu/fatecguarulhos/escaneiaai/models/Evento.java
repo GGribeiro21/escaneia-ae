@@ -13,7 +13,7 @@ import br.edu.fatecguarulhos.escaneiaai.util.ImpressoraTermica;
 import br.edu.fatecguarulhos.escaneiaai.util.QrCodeManager;
 
 public class Evento {
-    private String titulo, id, idCriador;
+    private String titulo, id, idCriador, senha, local, descricao;
     private String dataInicio, dataFim;
     private List<Participante> participantes = new ArrayList<>();
     //private DateTime dataInicio, dataFim,
@@ -92,5 +92,29 @@ public class Evento {
 
     public void setParticipantes(List<Participante> participantes) {
         this.participantes = participantes;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public String getLocal() {
+        return local;
+    }
+
+    public void setLocal(String local) {
+        this.local = local;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 }

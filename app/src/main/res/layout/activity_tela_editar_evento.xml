@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".telas.TelaCriarEvento">
+    tools:context=".TelaEditarEvento">
 
     <LinearLayout
         android:layout_width="409dp"
@@ -28,7 +28,7 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/edtNomeEvento_formCriarEvento"
+            android:id="@+id/edtNomeEvento_telaEditarEvento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -53,7 +53,7 @@
                     android:textSize="20sp" />
 
                 <EditText
-                    android:id="@+id/edtdataInicio_formCriaEvento"
+                    android:id="@+id/edtdataInicio_telaEditarEvento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
@@ -77,7 +77,7 @@
                     android:textSize="20sp" />
 
                 <EditText
-                    android:id="@+id/edtdataFim_formCriaEvento"
+                    android:id="@+id/edtdataFim_telaEditarEvento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
@@ -97,7 +97,7 @@
             android:text="Local" />
 
         <EditText
-            android:id="@+id/edtLocal_criarEvento"
+            android:id="@+id/edtLocal_telaEditarEvento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -112,7 +112,7 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/edtDescricao_criarEvento"
+            android:id="@+id/edtDescricao_telaEditarEvento"
             android:layout_width="match_parent"
             android:layout_height="139dp"
             android:ems="10"
@@ -122,16 +122,23 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/btnCriarEvento_formCriarEvento"
+            android:id="@+id/btnEditarEvento_telaEditarEvento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Criar" />
+            android:text="Editar" />
 
         <Button
-            android:id="@+id/btnVoltar_formCriarEvento"
+            android:id="@+id/btnExcluirEvento_telaEditarEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Excluir" />
+
+        <Button
+            android:id="@+id/btnVoltar_telaEditarEvento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Voltar" />
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
