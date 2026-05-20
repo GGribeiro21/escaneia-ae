@@ -17,9 +17,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import br.edu.fatecguarulhos.escaneiaai.R;
+import br.edu.fatecguarulhos.escaneiaai.TelaEditarEvento;
 import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 
@@ -60,12 +62,10 @@ public class TelaCriarEvento extends AppCompatActivity {
         btnCriar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(validarDatas()){
+                if(validarDados()){
                     Evento e = criarEvento();
                     registrarEvento(e);
                 }
-                else
-                    Toast.makeText(v.getContext(), "Data inicio/fim inválida", Toast.LENGTH_SHORT).show();
             }
         });
         btnVoltar.setOnClickListener(new View.OnClickListener() {
@@ -89,27 +89,44 @@ public class TelaCriarEvento extends AppCompatActivity {
     }
 
     private Evento criarEvento(){
-        Evento e = new Evento();
-        e.setTitulo(edtNomeEvento.getText().toString());
-        e.setDataInicio(edtDataInicio.getText().toString());
-        e.setDataFim(edtDataFim.getText().toString());
-        e.setIdCriador(getIdCelular());
-        e.setLocal(edtLocal.getText().toString());
-        e.setDescricao(edtDescricao.getText().toString());
+
+            Evento e = new Evento();
+            e.setTitulo(edtNomeEvento.getText().toString());
+            e.setDataInicio(edtDataInicio.getText().toString());
+            e.setDataFim(edtDataFim.getText().toString());
+            e.setIdCriador(getIdCelular());
+            e.setLocal(edtLocal.getText().toString());
+            e.setDescricao(edtDescricao.getText().toString());
+
+
         return e;
+
+
     }
     private void registrarEvento(Evento e){
-        try {
+        if(e != null){
             dbConnection.adicionarEvento(e);
             Toast.makeText(this, "Evento criado com sucesso",Toast.LENGTH_SHORT).show();
+            finish();
         }
-        catch (Exception exception){
-            Toast.makeText(this, exception.getMessage(),Toast.LENGTH_SHORT).show();
-        }
-
-        finish();
     }
+    private boolean validarDados(){
+        if(!validarTitulo(edtNomeEvento)){
+            Toast.makeText(this, "NOme obrigatório", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(!validarDatas(edtDataInicio, edtDataFim)){
+            Toast.makeText(this, "Data inicio/fim inválida", Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
+        if(!validarLocal(edtLocal)){
+            Toast.makeText(this, "Local obrigatório", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+
+    }
     private void mostrarEscolhaDateTime(EditText edtData){
         new DatePickerDialog(this, (view, ano, mes, dia) -> {
             calendario.set(Calendar.YEAR, ano);
@@ -120,7 +137,7 @@ public class TelaCriarEvento extends AppCompatActivity {
                 calendario.set(Calendar.HOUR_OF_DAY, hora);
                 calendario.set(Calendar.MINUTE, minuto);
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY - HH:mm", Locale.getDefault());
                 edtData.setText(sdf.format(calendario.getTime()));
 
             }, calendario.get(Calendar.HOUR_OF_DAY), calendario.get(Calendar.MINUTE), false).show();
@@ -128,57 +145,45 @@ public class TelaCriarEvento extends AppCompatActivity {
         }, calendario.get(Calendar.YEAR), calendario.get(Calendar.MONTH), calendario.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    private boolean validarDatas(){
-        if(edtDataFim.getText().toString().equals("") || edtDataInicio.getText().toString().equals(""))
+    private boolean validarDatas(EditText dataInicio1, EditText dataFim1){
+        if(dataFim1.getText().toString().equals("") || dataInicio1.getText().toString().equals(""))
             return false;
-
-        String strInicio = edtDataInicio.getText().toString();
-        String strFim = edtDataFim.getText().toString();
-        // os 2 campos tem que estar cheios
-        if(strInicio.equals("") || strFim.equals(""))
-            return false;
-        String[] dataHoraInicio = strInicio.split(" ");
-        String[] dataInicio = dataHoraInicio[0].split("-");
-        String[] horaInicio = dataHoraInicio[1].split(":");
-
-        String[] dataHoraFim = strFim.split(" ");
-        String[] dataFim = dataHoraFim[0].split("-");
-        String[] horaFim = dataHoraFim[1].split(":");
-
-        // ano seguite
-        if(Integer.parseInt(dataFim[0]) > Integer.parseInt(dataInicio[0]))
+        String strInicio = dataInicio1.getText().toString();
+        String strFim = dataFim1.getText().toString();
+        Calendar d1 = stringToCalendar(strInicio);
+        Calendar d2 = stringToCalendar(strFim);
+        if(d1.equals(d2))
             return true;
-        // mesmo ano
-        if(Integer.parseInt(dataFim[0]) == Integer.parseInt(dataInicio[0])){
-            // mes seguinte
-            if(Integer.parseInt(dataFim[1]) > Integer.parseInt(dataInicio[1]))
-                return true;
-            // mesmo mes
-            if(Integer.parseInt(dataFim[1]) == Integer.parseInt(dataInicio[1])) {
-                // dia seguinte
-                if(Integer.parseInt(dataFim[2]) > Integer.parseInt(dataInicio[2]))
-                    return true;
-                // mesmo dia
-                if(Integer.parseInt(dataFim[2]) == Integer.parseInt(dataInicio[2])) {
-                    // hora seguinte
-                    if(Integer.parseInt(horaFim[0]) > Integer.parseInt(horaInicio[0]))
-                        return true;
-                    // mesma hora
-                    if(Integer.parseInt(horaFim[0]) == Integer.parseInt(horaInicio[0])) {
-                        // minuto seguinte
-                        if(Integer.parseInt(horaFim[0]) > Integer.parseInt(horaInicio[0]))
-                            return true;
-                    }
-                }
-            }
+        return(d1.before(d2));
+    }
+    private boolean validarTitulo(EditText campoNome){
+        if(campoNome.getText().toString().isEmpty() || campoNome.getText().equals("")){
+            return false;
         }
-        return false;
-
-
+        return true;
+    }
+    private boolean validarLocal(EditText campoLocal){
+        if(campoLocal.getText().toString().isEmpty() || campoLocal.getText().equals("")){
+            return false;
+        }
+        return true;
     }
     // para definir o criador do evento
     private String getIdCelular(){
         return Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+    public Calendar stringToCalendar(String dateString) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.getDefault());
+        try {
+            Date date = sdf.parse(dateString);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            return cal;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

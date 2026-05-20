@@ -1,5 +1,7 @@
 package br.edu.fatecguarulhos.escaneiaai;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +19,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 
@@ -24,6 +31,8 @@ public class TelaEditarEvento extends AppCompatActivity {
     private EditText edtNome, edtLocal, edtDescricao, edtDataInicio, edtDataFim;
     private Button btnVoltar, btnAlterar, btnExcluir;
     private Evento evento;
+
+    private Calendar calendario = Calendar.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +71,18 @@ public class TelaEditarEvento extends AppCompatActivity {
         edtDescricao.setText(evento.getDescricao());
         edtDataInicio.setText(evento.getDataInicio());
         edtDataFim.setText(evento.getDataFim());
+        edtDataFim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarEscolhaDateTime(edtDataFim);
+            }
+        });
+        edtDataInicio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarEscolhaDateTime(edtDataInicio);
+            }
+        });
         btnAlterar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,26 +110,109 @@ public class TelaEditarEvento extends AppCompatActivity {
                 .setPositiveButton("Excluir", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        EventoDao eventoDAO = new EventoDao();
-                        eventoDAO.deleteEvento(evento.getId());
-                        Toast.makeText(TelaEditarEvento.this, "Evento excluido!", Toast.LENGTH_SHORT).show();
-                        Intent it = new Intent();
-                        it.putExtra("excluido", true);
-                        setResult(AppCompatActivity.RESULT_OK, it);
-                        finish();
+                        try{
+                            EventoDao eventoDAO = new EventoDao();
+                            eventoDAO.deleteEvento(evento.getId());
+                            Toast.makeText(TelaEditarEvento.this, "Evento excluido!", Toast.LENGTH_SHORT).show();
+                            Intent it = new Intent();
+                            it.putExtra("excluido", true);
+                            setResult(AppCompatActivity.RESULT_OK, it);
+                            finish();
+                        } catch (RuntimeException re){
+                            Toast.makeText(TelaEditarEvento.this, re.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     }})
                 .setNegativeButton(android.R.string.no, null).show();
 
     }
     public void editarEvento(){
-        evento.setTitulo(edtNome.getText().toString());
-        evento.setLocal(edtLocal.getText().toString());
-        evento.setDescricao(edtDescricao.getText().toString());
-        evento.setDataInicio(edtDataInicio.getText().toString());
-        evento.setDataFim(edtDataFim.getText().toString());
-        EventoDao eventoDAO = new EventoDao();
-        eventoDAO.updateEvento(evento);
-        Toast.makeText(this, "Evento editado!", Toast.LENGTH_SHORT).show();
+        try{
+            if(validarDados()){
+                evento.setTitulo(edtNome.getText().toString());
+                evento.setLocal(edtLocal.getText().toString());
+                evento.setDescricao(edtDescricao.getText().toString());
+                evento.setDataInicio(edtDataInicio.getText().toString());
+                evento.setDataFim(edtDataFim.getText().toString());
+                EventoDao eventoDAO = new EventoDao();
+                eventoDAO.updateEvento(evento);
+                Toast.makeText(this, "Evento editado!", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (RuntimeException re){
+            Toast.makeText(TelaEditarEvento.this, re.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (Exception e){
+            Toast.makeText(TelaEditarEvento.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+    private boolean validarDados(){
+        if(!validarTitulo(edtNome)){
+            Toast.makeText(this, "NOme obrigatório", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(!validarDatas(edtDataInicio, edtDataFim)){
+            Toast.makeText(this, "Data inicio/fim inválida", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(!validarLocal(edtLocal)){
+            Toast.makeText(this, "Local obrigatório", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+
+    }
+    private boolean validarDatas(EditText dataInicio1, EditText dataFim1){
+        if(dataFim1.getText().toString().equals("") || dataInicio1.getText().toString().equals(""))
+            return false;
+        String strInicio = dataInicio1.getText().toString();
+        String strFim = dataFim1.getText().toString();
+        Calendar d1 = stringToCalendar(strInicio);
+        Calendar d2 = stringToCalendar(strFim);
+        if(d1.equals(d2))
+            return true;
+        return(d1.before(d2));
+    }
+    private boolean validarTitulo(EditText campoNome){
+        if(campoNome.getText().toString().isEmpty() || campoNome.getText().equals("")){
+            return false;
+        }
+        return true;
+    }
+    private boolean validarLocal(EditText campoLocal){
+        if(campoLocal.getText().toString().isEmpty() || campoLocal.getText().equals("")){
+            return false;
+        }
+        return true;
+    }
+    private void mostrarEscolhaDateTime(EditText edtData){
+        new DatePickerDialog(this, (view, ano, mes, dia) -> {
+            calendario.set(Calendar.YEAR, ano);
+            calendario.set(Calendar.MONTH, mes);
+            calendario.set(Calendar.DAY_OF_MONTH, dia);
+
+            new TimePickerDialog(this, (timeView, hora, minuto) -> {
+                calendario.set(Calendar.HOUR_OF_DAY, hora);
+                calendario.set(Calendar.MINUTE, minuto);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.getDefault());
+                edtData.setText(sdf.format(calendario.getTime()));
+
+            }, calendario.get(Calendar.HOUR_OF_DAY), calendario.get(Calendar.MINUTE), false).show();
+
+        }, calendario.get(Calendar.YEAR), calendario.get(Calendar.MONTH), calendario.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    public Calendar stringToCalendar(String dateString) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.getDefault());
+        try {
+            Date date = sdf.parse(dateString);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            return cal;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

@@ -47,8 +47,12 @@ public class MainActivity extends AppCompatActivity {
             return WindowInsetsCompat.CONSUMED;
         });
         // configiração base/inicial do codigo
-        inicializarValores();
-        configurarNavbar();
+        try{
+            inicializarValores();
+            configurarNavbar();
+        } catch (RuntimeException re){
+            Toast.makeText(this, re.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
     private void inicializarValores(){
         bottomNavigationView = findViewById(R.id.bottom_navigation);
