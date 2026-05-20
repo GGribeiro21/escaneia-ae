@@ -89,26 +89,35 @@ public class TelaEditarEvento extends AppCompatActivity {
                 .setPositiveButton("Excluir", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        EventoDao eventoDAO = new EventoDao();
-                        eventoDAO.deleteEvento(evento.getId());
-                        Toast.makeText(TelaEditarEvento.this, "Evento excluido!", Toast.LENGTH_SHORT).show();
-                        Intent it = new Intent();
-                        it.putExtra("excluido", true);
-                        setResult(AppCompatActivity.RESULT_OK, it);
-                        finish();
+                        try{
+                            EventoDao eventoDAO = new EventoDao();
+                            eventoDAO.deleteEvento(evento.getId());
+                            Toast.makeText(TelaEditarEvento.this, "Evento excluido!", Toast.LENGTH_SHORT).show();
+                            Intent it = new Intent();
+                            it.putExtra("excluido", true);
+                            setResult(AppCompatActivity.RESULT_OK, it);
+                            finish();
+                        } catch (RuntimeException re){
+                            Toast.makeText(TelaEditarEvento.this, re.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     }})
                 .setNegativeButton(android.R.string.no, null).show();
 
     }
     public void editarEvento(){
-        evento.setTitulo(edtNome.getText().toString());
-        evento.setLocal(edtLocal.getText().toString());
-        evento.setDescricao(edtDescricao.getText().toString());
-        evento.setDataInicio(edtDataInicio.getText().toString());
-        evento.setDataFim(edtDataFim.getText().toString());
-        EventoDao eventoDAO = new EventoDao();
-        eventoDAO.updateEvento(evento);
-        Toast.makeText(this, "Evento editado!", Toast.LENGTH_SHORT).show();
+        try{
+            evento.setTitulo(edtNome.getText().toString());
+            evento.setLocal(edtLocal.getText().toString());
+            evento.setDescricao(edtDescricao.getText().toString());
+            evento.setDataInicio(edtDataInicio.getText().toString());
+            evento.setDataFim(edtDataFim.getText().toString());
+            EventoDao eventoDAO = new EventoDao();
+            eventoDAO.updateEvento(evento);
+            Toast.makeText(this, "Evento editado!", Toast.LENGTH_SHORT).show();
+
+        } catch (RuntimeException re){
+            Toast.makeText(TelaEditarEvento.this, re.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 

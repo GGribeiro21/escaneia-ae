@@ -18,6 +18,7 @@ import com.google.zxing.integration.android.IntentResult;
 import java.util.List;
 
 import br.edu.fatecguarulhos.escaneiaai.R;
+import br.edu.fatecguarulhos.escaneiaai.TelaEditarEvento;
 import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
 import br.edu.fatecguarulhos.escaneiaai.interfaces.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
@@ -52,6 +53,7 @@ public class CameraLeitorCode extends AppCompatActivity {
     // Resultado da leitura do QR code na tela "HomeFragment"
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
         // finalizar a tela(garante que a tela em si nunca seja vista)
         finish();
         //String msgQrCode = QrCodeManager.getResultadoLeitor(requestCode, resultCode, data);
@@ -64,22 +66,26 @@ public class CameraLeitorCode extends AppCompatActivity {
         if(msgQrCode == null){
             super.onActivityResult(requestCode, resultCode, data);
         } else {
-            // dividir o id[0] do tipo de qr code[1]
-            String[] msgFatiada = msgQrCode.split("/type=");
-            EventoDao eventoConnection = new EventoDao();
-            eventoConnection.getEventoById(
-                    msgFatiada[0],
-                    // garantir q estejam sincronos
-                    new FirebaseCallback() {
-                        @Override
-                        public void onCallbackForAll(List<Evento> lista) { }
+            try{
+                // dividir o id[0] do tipo de qr code[1]
+                String[] msgFatiada = msgQrCode.split("/type=");
+                EventoDao eventoConnection = new EventoDao();
+                eventoConnection.getEventoById(
+                        msgFatiada[0],
+                        // garantir q estejam sincronos
+                        new FirebaseCallback() {
+                            @Override
+                            public void onCallbackForAll(List<Evento> lista) { }
 
-                        @Override
-                        public void onCallBackByid(Evento e) {
-                            String jsonEvento = new Gson().toJson(e);
-                            resultLeituraQC(jsonEvento, msgFatiada[1]);
-                        }
-                    });
+                            @Override
+                            public void onCallBackByid(Evento e) {
+                                String jsonEvento = new Gson().toJson(e);
+                                resultLeituraQC(jsonEvento, msgFatiada[1]);
+                            }
+                        });
+            } catch (RuntimeException re){
+                Toast.makeText(CameraLeitorCode.this, re.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }
     }
     public void resultLeituraQC(String jsonEvento, String tipoQrCode){

@@ -132,26 +132,30 @@ public class TelaEvento extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        EventoDao eventoDao = new EventoDao();
-        String idEvento = evento.getId();
-        eventoDao.getEventoById(idEvento, new FirebaseCallback() {
-            @Override
-            public void onCallbackForAll(List<Evento> lista) {
+        try{
+            EventoDao eventoDao = new EventoDao();
+            String idEvento = evento.getId();
+            eventoDao.getEventoById(idEvento, new FirebaseCallback() {
+                @Override
+                public void onCallbackForAll(List<Evento> lista) {
 
-            }
-
-            @Override
-            public void onCallBackByid(Evento e) {
-                evento = e;
-                if(evento != null){
-                    inicializarComponentes();
-                    configurarComponentes();
-                    gerarListaCardParticipantes();
-                } else {
-                    Toast.makeText(TelaEvento.this,"Evento não encontrado", Toast.LENGTH_SHORT).show();
-                    finish();
                 }
-            }
-        });
+
+                @Override
+                public void onCallBackByid(Evento e) {
+                    evento = e;
+                    if(evento != null){
+                        inicializarComponentes();
+                        configurarComponentes();
+                        gerarListaCardParticipantes();
+                    } else {
+                        Toast.makeText(TelaEvento.this,"Evento não encontrado", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+            });
+        } catch (RuntimeException re){
+            Toast.makeText(this, re.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 }

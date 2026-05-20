@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import br.edu.fatecguarulhos.escaneiaai.R;
+import br.edu.fatecguarulhos.escaneiaai.TelaEditarEvento;
 import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.util.ImpressoraTermica;
@@ -52,11 +53,16 @@ public class TelaQrCode extends AppCompatActivity {
     }
 
     private void inicializarValores() {
-        Intent it =  getIntent();
-        idEvento = it.getStringExtra("id");
-        tituloEvento = it.getStringExtra("titulo");
-        eventoDao = new EventoDao();
-        evento = new Evento();}
+        try{
+            Intent it =  getIntent();
+            idEvento = it.getStringExtra("id");
+            tituloEvento = it.getStringExtra("titulo");
+            eventoDao = new EventoDao();
+            evento = new Evento();
+        } catch (RuntimeException re){
+            Toast.makeText(this, re.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void inicializarComponentes(){
         txtTituloEvento = findViewById(R.id.txtTituloEvento_telaQrCode);

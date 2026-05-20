@@ -20,6 +20,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import br.edu.fatecguarulhos.escaneiaai.R;
+import br.edu.fatecguarulhos.escaneiaai.TelaEditarEvento;
 import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 
@@ -44,7 +45,11 @@ public class TelaCriarEvento extends AppCompatActivity {
     }
 
     private void inicializarValores() {
-        dbConnection = new EventoDao();
+        try{
+            dbConnection = new EventoDao();
+        } catch (RuntimeException re){
+            Toast.makeText(this, re.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void inicializarComponentes(){

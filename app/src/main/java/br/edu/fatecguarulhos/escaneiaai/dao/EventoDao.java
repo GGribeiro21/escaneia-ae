@@ -1,6 +1,9 @@
 package br.edu.fatecguarulhos.escaneiaai.dao;
 
+import static android.content.ContentValues.TAG;
+
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -20,7 +23,25 @@ import br.edu.fatecguarulhos.escaneiaai.interfaces.FirebaseCallback;
 public class EventoDao {
     private FirebaseDatabase database;
     public EventoDao(){
+        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean connected = snapshot.getValue(Boolean.class);
+                if (connected) {
+                    Log.d(TAG, "connected");
+                } else {
+                    Log.d(TAG, "not connected");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "Listener was cancelled");
+            }
+        });
         database = FirebaseDatabase.getInstance();
+
     }
     public void adicionarEvento(Evento e){
         DatabaseReference myRef = database.getReference("eventos");
