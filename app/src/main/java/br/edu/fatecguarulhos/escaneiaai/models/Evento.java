@@ -111,8 +111,6 @@ public class Evento {
     }
 
     public String getDescricao() {
-        if(descricao.equals("") || descricao.equals(null))
-            return "Sem descrição";
         return descricao;
     }
 

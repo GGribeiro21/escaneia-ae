@@ -22,13 +22,14 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import br.edu.fatecguarulhos.escaneiaai.R;
+import br.edu.fatecguarulhos.escaneiaai.TelaEditarEvento;
 import br.edu.fatecguarulhos.escaneiaai.adapter.ParticipanteAdapter;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.models.Participante;
 
 public class TelaEvento extends AppCompatActivity {
     private TextView txtTituloEvento, txtLocalEvento, txtDataEvento, txtDescricaoEvento;
-    private FloatingActionButton fabQrCode;
+    private FloatingActionButton fabQrCode, fabEditarEvento;
     private Evento evento;
     private RecyclerView rvParticipantes;
     private ParticipanteAdapter adapter;
@@ -60,17 +61,28 @@ public class TelaEvento extends AppCompatActivity {
         txtLocalEvento = findViewById(R.id.txtLocalEvento_telaEvento);
         txtDescricaoEvento = findViewById(R.id.txtDescricaoEvento_telaEvento);
         fabQrCode = findViewById(R.id.fabQrCode_telaEvento);
+        fabEditarEvento = findViewById(R.id.fabEditarEvento_telaEvento);
         rvParticipantes = findViewById(R.id.rvPresentes);
     }
     private void configurarComponentes(){
         txtTituloEvento.setText(evento.getTitulo());
         txtDataEvento.setText("Inicio: " + evento.getDataInicio() + "\nFim: " + evento.getDataFim());
         txtLocalEvento.setText("Local: " + evento.getLocal());
-        txtDescricaoEvento.setText("Descrição: " + evento.getDescricao());
+
+        if(evento.getDescricao() == null)
+            txtDescricaoEvento.setText("Descrição: Sem descricao");
+        else
+            txtDescricaoEvento.setText("Descrição: " + evento.getDescricao());
         fabQrCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 abrirTelaQrCode();
+            }
+        });
+        fabEditarEvento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                telaEditarEvento();
             }
         });
     }
@@ -98,6 +110,12 @@ public class TelaEvento extends AppCompatActivity {
         return true;
     }
 
+    private void telaEditarEvento(){
+        String eventoJson = new Gson().toJson(evento);
+        Intent it = new Intent(this, TelaEditarEvento.class);
+        it.putExtra("jsonEvento", eventoJson);
+        startActivity(it);
+    }
 
     public void voltar(View view){
         finish();

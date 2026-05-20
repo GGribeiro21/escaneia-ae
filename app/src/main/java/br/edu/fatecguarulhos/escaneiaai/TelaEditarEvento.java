@@ -1,0 +1,89 @@
+package br.edu.fatecguarulhos.escaneiaai;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.google.gson.Gson;
+
+import br.edu.fatecguarulhos.escaneiaai.models.Evento;
+
+public class TelaEditarEvento extends AppCompatActivity {
+    private EditText edtNome, edtLocal, edtDescricao, edtDataInicio, edtDataFim;
+    private Button btnVoltar, btnAlterar, btnExcluir;
+    private Evento evento;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_tela_editar_evento);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+        inicializarValores();
+        inicializarComponentes();
+        configurarComponentes();
+    }
+
+    private void inicializarValores() {
+        Intent it = getIntent();
+        String jsonEvento = it.getStringExtra("jsonEvento");
+        evento =  new Gson().fromJson(jsonEvento, Evento.class);
+    }
+
+    private void inicializarComponentes(){
+        edtNome = findViewById(R.id.edtNomeEvento_telaEditarEvento);
+        edtDescricao = findViewById(R.id.edtDescricao_telaEditarEvento);
+        edtLocal = findViewById(R.id.edtLocal_telaEditarEvento);
+        edtDataInicio = findViewById(R.id.edtdataInicio_telaEditarEvento);
+        edtDataFim = findViewById(R.id.edtdataFim_telaEditarEvento);
+        btnAlterar = findViewById(R.id.btnEditarEvento_telaEditarEvento);
+        btnExcluir = findViewById(R.id.btnExcluirEvento_telaEditarEvento);
+        btnVoltar = findViewById(R.id.btnVoltar_telaEditarEvento);
+    }
+    private void configurarComponentes(){
+
+        edtNome.setText(evento.getTitulo());
+        edtLocal.setText(evento.getLocal());
+        edtDescricao.setText(evento.getDescricao());
+        edtDataInicio.setText(evento.getDataInicio());
+        edtDataFim.setText(evento.getDataFim());
+        btnAlterar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editarEvento();
+            }
+        });
+        btnExcluir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                excluirEvento();
+            }
+        });
+        btnVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+    public void excluirEvento(){
+
+    }
+    public void editarEvento(){
+
+    }
+
+
+
+}
