@@ -15,11 +15,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.type.DateTime;
-
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -28,7 +24,7 @@ import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 
 public class TelaCriarEvento extends AppCompatActivity {
-    private EditText edtNomeEvento, edtDataInicio, edtDataFim;
+    private EditText edtNomeEvento, edtDataInicio, edtDataFim, edtDescricao, edtLocal;
     private Button btnCriar, btnVoltar;
     private EventoDao dbConnection;
     private Calendar calendario = Calendar.getInstance();
@@ -55,6 +51,8 @@ public class TelaCriarEvento extends AppCompatActivity {
         edtDataInicio = findViewById(R.id.edtdataInicio_formCriaEvento);
         edtDataFim = findViewById(R.id.edtdataFim_formCriaEvento);
         edtNomeEvento = findViewById(R.id.edtNomeEvento_formCriarEvento);
+        edtLocal = findViewById(R.id.edtLocal_criarEvento);
+        edtDescricao = findViewById(R.id.edtDescricao_criarEvento);
         btnCriar = findViewById(R.id.btnCriarEvento_formCriarEvento);
         btnVoltar = findViewById(R.id.btnVoltar_formCriarEvento);
     }
@@ -96,6 +94,8 @@ public class TelaCriarEvento extends AppCompatActivity {
         e.setDataInicio(edtDataInicio.getText().toString());
         e.setDataFim(edtDataFim.getText().toString());
         e.setIdCriador(getIdCelular());
+        e.setLocal(edtLocal.getText().toString());
+        e.setDescricao(edtDescricao.getText().toString());
         return e;
     }
     private void registrarEvento(Evento e){

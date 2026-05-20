@@ -24,7 +24,8 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nome do Evento" />
+            android:text="Nome do Evento"
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/edtNomeEvento_formCriarEvento"
@@ -48,7 +49,8 @@
                     android:id="@+id/textView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Inicio" />
+                    android:text="Inicio"
+                    android:textSize="20sp" />
 
                 <EditText
                     android:id="@+id/edtdataInicio_formCriaEvento"
@@ -71,7 +73,8 @@
                     android:id="@+id/textView3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Fim" />
+                    android:text="Fim"
+                    android:textSize="20sp" />
 
                 <EditText
                     android:id="@+id/edtdataFim_formCriaEvento"
@@ -86,6 +89,37 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Local" />
+
+        <EditText
+            android:id="@+id/edtLocal_criarEvento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Local"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Descrição(Opicional)"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/edtDescricao_criarEvento"
+            android:layout_width="match_parent"
+            android:layout_height="139dp"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/btnCriarEvento_formCriarEvento"
