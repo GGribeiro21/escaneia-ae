@@ -139,7 +139,7 @@ public class TelaEditarEvento extends AppCompatActivity {
                 Toast.makeText(this, "Local obrigatório", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if(validarDatas(edtDataInicio, edtDataFim)){
+            if(!validarDatas(edtDataInicio, edtDataFim)){
                 Toast.makeText(this, "Data inicio/fim inválida!", Toast.LENGTH_SHORT).show();
                 return;
             }
