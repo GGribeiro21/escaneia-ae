@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,10 +21,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.TelaEditarEvento;
 import br.edu.fatecguarulhos.escaneiaai.adapter.ParticipanteAdapter;
+import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
+import br.edu.fatecguarulhos.escaneiaai.interfaces.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.models.Participante;
 
@@ -123,5 +127,31 @@ public class TelaEvento extends AppCompatActivity {
 
     public void voltar(MenuItem menuItem){
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventoDao eventoDao = new EventoDao();
+        String idEvento = evento.getId();
+        eventoDao.getEventoById(idEvento, new FirebaseCallback() {
+            @Override
+            public void onCallbackForAll(List<Evento> lista) {
+
+            }
+
+            @Override
+            public void onCallBackByid(Evento e) {
+                evento = e;
+                if(evento == null){
+                    Toast.makeText(TelaEvento.this,"Evento Excluido", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    inicializarComponentes();
+                    configurarComponentes();
+                    gerarListaCardParticipantes();
+                }
+            }
+        });
     }
 }

@@ -1,5 +1,6 @@
 package br.edu.fatecguarulhos.escaneiaai;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -80,6 +82,19 @@ public class TelaEditarEvento extends AppCompatActivity {
         });
     }
     public void excluirEvento(){
+        new AlertDialog.Builder(this)
+                .setTitle("Excluindo evento")
+                .setMessage("Deseja realmente excluir " + evento.getTitulo() +"?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton("Excluir", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        EventoDao eventoDAO = new EventoDao();
+                        eventoDAO.deleteEvento(evento.getId());
+                        //Toast.makeText(TelaEditarEvento.this, "Evento excluido!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }})
+                .setNegativeButton(android.R.string.no, null).show();
 
     }
     public void editarEvento(){

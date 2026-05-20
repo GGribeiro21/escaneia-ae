@@ -87,6 +87,10 @@ public class EventoDao {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("eventos").child(evento.getId());;
         ref.setValue(evento);
     }
+    public void deleteEvento(String idEvento){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("eventos").child(idEvento);;
+        ref.setValue(null);
+    }
 
 
 }
