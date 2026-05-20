@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
@@ -157,50 +158,13 @@ public class TelaEditarEvento extends AppCompatActivity {
     private boolean validarDatas(EditText dataInicio1, EditText dataFim1){
         if(dataFim1.getText().toString().equals("") || dataInicio1.getText().toString().equals(""))
             return false;
-
         String strInicio = dataInicio1.getText().toString();
         String strFim = dataFim1.getText().toString();
-        // os 2 campos tem que estar cheios
-        if(strInicio.equals("") || strFim.equals(""))
-            return false;
-        String[] dataHoraInicio = strInicio.split(" - ");
-        String[] dataInicio = dataHoraInicio[0].split("/");
-        String[] horaInicio = dataHoraInicio[1].split(":");
-
-        String[] dataHoraFim = strFim.split(" - ");
-        String[] dataFim = dataHoraFim[0].split("/");
-        String[] horaFim = dataHoraFim[1].split(":");
-
-        // ano seguite
-        if(Integer.parseInt(dataFim[2]) > Integer.parseInt(dataInicio[0]))
+        Calendar d1 = stringToCalendar(strInicio);
+        Calendar d2 = stringToCalendar(strFim);
+        if(d1.equals(d2))
             return true;
-        // mesmo ano
-        if(Integer.parseInt(dataFim[2]) == Integer.parseInt(dataInicio[0])){
-            // mes seguinte
-            if(Integer.parseInt(dataFim[1]) > Integer.parseInt(dataInicio[1]))
-                return true;
-            // mesmo mes
-            if(Integer.parseInt(dataFim[1]) == Integer.parseInt(dataInicio[1])) {
-                // dia seguinte
-                if(Integer.parseInt(dataFim[1]) > Integer.parseInt(dataInicio[2]))
-                    return true;
-                // mesmo dia
-                if(Integer.parseInt(dataFim[1]) == Integer.parseInt(dataInicio[2])) {
-                    // hora seguinte
-                    if(Integer.parseInt(horaFim[0]) > Integer.parseInt(horaInicio[0]))
-                        return true;
-                    // mesma hora
-                    if(Integer.parseInt(horaFim[0]) == Integer.parseInt(horaInicio[0])) {
-                        // minuto seguinte
-                        if(Integer.parseInt(horaFim[0]) > Integer.parseInt(horaInicio[0]))
-                            return true;
-                    }
-                }
-            }
-        }
-        return false;
-
-
+        return(d1.before(d2));
     }
     private void mostrarEscolhaDateTime(EditText edtData){
         new DatePickerDialog(this, (view, ano, mes, dia) -> {
@@ -220,6 +184,18 @@ public class TelaEditarEvento extends AppCompatActivity {
         }, calendario.get(Calendar.YEAR), calendario.get(Calendar.MONTH), calendario.get(Calendar.DAY_OF_MONTH)).show();
     }
 
+    public Calendar stringToCalendar(String dateString) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.getDefault());
+        try {
+            Date date = sdf.parse(dateString);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            return cal;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
 
