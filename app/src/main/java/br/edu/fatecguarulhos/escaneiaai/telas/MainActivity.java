@@ -1,8 +1,6 @@
-package br.edu.fatecguarulhos.escaneiaai;
+package br.edu.fatecguarulhos.escaneiaai.telas;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,24 +11,20 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.components.CardEvento;
 import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
 import br.edu.fatecguarulhos.escaneiaai.interfaces.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
-import br.edu.fatecguarulhos.escaneiaai.telas.CameraLeitorCode;
-import br.edu.fatecguarulhos.escaneiaai.telas.TelaCriarEvento;
 
 public class MainActivity extends AppCompatActivity {
     private LinearLayout ll;
