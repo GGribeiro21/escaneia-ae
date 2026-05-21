@@ -57,16 +57,18 @@ public class TelaRegistrarParticipante extends AppCompatActivity {
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Participante p = criarParticipante();
-                registrarParticipante(p);
+                if(validarCampos()){
+                    Participante p = criarParticipante();
+                    registrarParticipante(p);
+                }
             }
         });
     }
     private Participante criarParticipante(){
         Participante p = new Participante();
-        inputNome = edtNome.getText().toString();
-        inputEmail = edtEmail.getText().toString();
-        inputRa = edtRa.getText().toString();
+        inputNome = edtNome.getText().toString().trim();
+        inputEmail = edtEmail.getText().toString().trim();
+        inputRa = edtRa.getText().toString().trim();
         p.setNome(inputNome);
         p.setEmail(inputEmail);
         p.setRa(inputRa);
@@ -97,6 +99,33 @@ public class TelaRegistrarParticipante extends AppCompatActivity {
         ParticipanteDao dbConnection = new ParticipanteDao();
         dbConnection.registrarSaidaParticipante(eventoJson, p);
         Toast.makeText(this, "Saida confirmada!", Toast.LENGTH_SHORT).show();
+    }
+    private boolean validarCampos(){
+        if(!validarCampoNome()) {
+            Toast.makeText(this, "Insira um nome válido", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(!validarCampoEmail()) {
+            Toast.makeText(this, "Insira um email válido", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(!validarCampoRa()) {
+            Toast.makeText(this, "Insira um RA válido", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+    private boolean validarCampoNome(){
+        String input = edtNome.getText().toString();
+        return !(input.trim().isEmpty());
+    }
+    private boolean validarCampoEmail(){
+        String input = edtEmail.getText().toString();
+        return !(input.isEmpty());
+    }
+    private boolean validarCampoRa(){
+        String input = edtRa.getText().toString();
+        return !(input.isEmpty());
     }
     public void salvarCache(){
         CacheHelper.saveToCache(this, inputNome, inputEmail, inputRa);
