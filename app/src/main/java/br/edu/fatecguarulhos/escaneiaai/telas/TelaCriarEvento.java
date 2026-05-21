@@ -92,14 +92,14 @@ public class TelaCriarEvento extends AppCompatActivity {
     private Evento criarEvento(){
 
             Evento e = new Evento();
-            e.setTitulo(edtNomeEvento.getText().toString());
+            e.setTitulo(edtNomeEvento.getText().toString().trim());
             e.setDataInicio(edtDataInicio.getText().toString());
             e.setDataFim(edtDataFim.getText().toString());
             String idHash = String.valueOf(getIdCelular().hashCode());
             e.setIdCriador(getIdCelular());
             e.setSenha(idHash.substring(2,6));
-            e.setLocal(edtLocal.getText().toString());
-            e.setDescricao(edtDescricao.getText().toString());
+            e.setLocal(edtLocal.getText().toString().trim());
+            e.setDescricao(edtDescricao.getText().toString().trim());
 
 
         return e;
@@ -116,7 +116,7 @@ public class TelaCriarEvento extends AppCompatActivity {
     }
     private boolean validarDados(){
         if(!validarTitulo(edtNomeEvento)){
-            Toast.makeText(this, "NOme obrigatório", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Nome obrigatório", Toast.LENGTH_SHORT).show();
             return false;
         }
         if(!validarDatas(edtDataInicio, edtDataFim)){
@@ -174,16 +174,12 @@ public class TelaCriarEvento extends AppCompatActivity {
         return(d1.before(d2));
     }
     private boolean validarTitulo(EditText campoNome){
-        if(campoNome.getText().toString().isEmpty() || campoNome.getText().equals("")){
-            return false;
-        }
-        return true;
+        String input = campoNome.getText().toString().trim();
+        return !input.isEmpty();
     }
     private boolean validarLocal(EditText campoLocal){
-        if(campoLocal.getText().toString().isEmpty() || campoLocal.getText().equals("")){
-            return false;
-        }
-        return true;
+        String input = campoLocal.getText().toString().trim();
+        return !input.isEmpty();
     }
     // para definir o criador do evento
     private String getIdCelular(){
