@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class CardEvento extends ConstraintLayout {
-    private String titulo, corpo, jsonEvento;
+    private String titulo, corpo, jsonEvento, andamento;
     private TextView txtAndamento;
     private Evento evento;
     private CardView cardView;
@@ -67,14 +67,17 @@ public class CardEvento extends ConstraintLayout {
         int momenotInt = momentoEvento();
         if(momenotInt == 0){
             txtAndamento.setText("Em breve");
+            andamento = "em_breve";
             txtAndamento.setTextColor(Color.parseColor("#40E0D0"));
         }
         else if(momenotInt == 1){
             txtAndamento.setText("Em andamento!");
+            andamento = "em_andamento";
             txtAndamento.setTextColor(Color.parseColor("#E4B32E"));
         }
         else if(momenotInt == 2){
             txtAndamento.setText("Encerrado");
+            andamento = "encerrado";
             txtAndamento.setTextColor(Color.parseColor("#EF3232"));
         }
         else {
