@@ -56,12 +56,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:clickable="true"
-                        android:focusable="true"
                         android:contentDescription="QR Code do Evento"
-                        app:fabSize="mini"
+                        android:focusable="true"
                         app:backgroundTint="#9333EA"
-                        app:tint="#FFFFFF"
-                        app:srcCompat="@android:drawable/ic_menu_camera" />
+                        app:fabSize="mini"
+                        app:srcCompat="@drawable/outline_qr_code_scanner_24"
+                        app:tint="#FFFFFF" />
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/fabEditarEvento_telaEvento"
