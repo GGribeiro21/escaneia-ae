@@ -97,7 +97,7 @@ public class TelaCriarEvento extends AppCompatActivity {
             e.setDataFim(edtDataFim.getText().toString());
             String idHash = String.valueOf(getIdCelular().hashCode());
             e.setIdCriador(getIdCelular());
-            e.setSenha(idHash.substring(0,4));
+            e.setSenha(idHash.substring(2,6));
             e.setLocal(edtLocal.getText().toString());
             e.setDescricao(edtDescricao.getText().toString());
 
