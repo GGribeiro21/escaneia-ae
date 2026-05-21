@@ -12,12 +12,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-import br.edu.fatecguarulhos.escaneiaai.MainActivity;
-import br.edu.fatecguarulhos.escaneiaai.TelaEditarEvento;
 import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.R;
@@ -90,7 +86,7 @@ public class PaginaListaEventos extends Fragment {
         try{
             ll = v.findViewById(R.id.layout_dados);
             dbConnection = new EventoDao();
-            btnQrCode = v.findViewById(R.id.fabAbrirLeitorQrCode_fragmentHome);
+            btnQrCode = v.findViewById(R.id.fabAbrirLeitorQrCode_main);
         } catch (RuntimeException re){
             Toast.makeText(getContext(), re.getMessage(), Toast.LENGTH_SHORT).show();
         }

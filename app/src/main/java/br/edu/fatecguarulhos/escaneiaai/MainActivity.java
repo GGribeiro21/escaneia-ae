@@ -1,10 +1,12 @@
 package br.edu.fatecguarulhos.escaneiaai;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -19,15 +21,25 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.List;
+
+import br.edu.fatecguarulhos.escaneiaai.components.CardEvento;
+import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
+import br.edu.fatecguarulhos.escaneiaai.interfaces.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.interfaces.Imprimivel;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.paginas.PaginaListaEventos;
 import br.edu.fatecguarulhos.escaneiaai.paginas.PaginaEventos;
+import br.edu.fatecguarulhos.escaneiaai.telas.CameraLeitorCode;
 import br.edu.fatecguarulhos.escaneiaai.util.ImpressoraTermica;
 
 public class MainActivity extends AppCompatActivity {
+    private LinearLayout ll;
+    private EventoDao dbConnection;
+    private FloatingActionButton btnQrCode;
     private BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +61,61 @@ public class MainActivity extends AppCompatActivity {
         // configiração base/inicial do codigo
         try{
             inicializarValores();
-            configurarNavbar();
+            configurarComponentes();
+            //configurarNavbar();
         } catch (RuntimeException re){
             Toast.makeText(this, re.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
     private void inicializarValores(){
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        //bottomNavigationView = findViewById(R.id.bottom_navigation);
+        try{
+            ll = findViewById(R.id.layout_dados_main);
+            dbConnection = new EventoDao();
+            btnQrCode = findViewById(R.id.fabAbrirLeitorQrCode_main);
+        } catch (RuntimeException re){
+            Toast.makeText(this, re.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
+
+    private void configurarComponentes(){
+        dbConnection.getAllEventos(new FirebaseCallback() {
+            @Override
+            public void onCallbackForAll(List<Evento> lista) {
+
+                atualizarListaEventos(lista);
+            }
+
+            @Override
+            public void onCallBackByid(Evento e) {
+
+            }
+        });
+        btnQrCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirCameraQrCode();
+            }
+        });
+    }
+
+    // botão para abrir camera e ler QrCode
+    public void abrirCameraQrCode(){
+        // jogar em outra activity para evitar erros com o onBackPressed
+        Intent it = new Intent(this, CameraLeitorCode.class);
+        startActivity(it);
+    }
+
+    public void atualizarListaEventos(List<Evento> lista){
+        ll.removeAllViewsInLayout();
+        for(Evento e : lista){
+            CardEvento card = new CardEvento(this);
+            card.alterarConteudo(e);
+            ll.addView(card);
+        }
+    }
+
+    /*
     private void configurarNavbar(){
         iniciarMenuItem(R.id.item_eventos);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -84,6 +143,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+     */
     public void imprimir(View view){
         try {
             if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.S && ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
