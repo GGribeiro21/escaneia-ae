@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -34,6 +36,7 @@ import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.paginas.PaginaListaEventos;
 import br.edu.fatecguarulhos.escaneiaai.paginas.PaginaEventos;
 import br.edu.fatecguarulhos.escaneiaai.telas.CameraLeitorCode;
+import br.edu.fatecguarulhos.escaneiaai.telas.TelaCriarEvento;
 import br.edu.fatecguarulhos.escaneiaai.util.ImpressoraTermica;
 
 public class MainActivity extends AppCompatActivity {
@@ -161,5 +164,18 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.appbar_tela_inicial, menu);
+        return true;
+    }
+    public void sair(MenuItem menuItem){
+        finish();
+    }
+    public void adicionarEvento(MenuItem item){
+        Intent it = new Intent(this, TelaCriarEvento.class);
+        startActivity(it);
+    }
 }

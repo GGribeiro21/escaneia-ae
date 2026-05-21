@@ -123,7 +123,7 @@ public class TelaEvento extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.appbar_exibir_evento, menu);
+        inflater.inflate(R.menu.appbar_voltar, menu);
         return true;
     }
 
