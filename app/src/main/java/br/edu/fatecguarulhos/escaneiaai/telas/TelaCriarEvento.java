@@ -135,12 +135,9 @@ public class TelaCriarEvento extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Senha: " + senha);
         builder.setMessage("Use esta senha para alterar seus eventos a partir de outro dispositivo.");
-
-// Set the Positive (Yes/OK) button
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Code to execute when OK is clicked
                 dialog.dismiss();
             }
         });
