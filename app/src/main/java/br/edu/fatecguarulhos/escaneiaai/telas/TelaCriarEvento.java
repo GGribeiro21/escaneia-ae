@@ -112,6 +112,7 @@ public class TelaCriarEvento extends AppCompatActivity {
             dbConnection.adicionarEvento(e);
             Toast.makeText(this, "Evento criado com sucesso",Toast.LENGTH_SHORT).show();
             mostrarSenha(e.getSenha());
+            limparCampos();
         }
     }
     private boolean validarDados(){
@@ -206,6 +207,14 @@ public class TelaCriarEvento extends AppCompatActivity {
             return null;
         }
     }
+    private void limparCampos(){
+        edtNomeEvento.setText("");
+        edtDataInicio.setText("");
+        edtDataFim.setText("");
+        edtLocal.setText("");
+        edtDescricao.setText("");
+    }
+
 
 }
 
