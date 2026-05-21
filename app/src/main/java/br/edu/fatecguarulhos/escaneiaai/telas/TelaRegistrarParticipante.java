@@ -80,8 +80,10 @@ public class TelaRegistrarParticipante extends AppCompatActivity {
                 registrarEntrada(p);
             else
                 registrarSaida(p);
-            salvarCache();
-            finish();
+            if(dadosJaSalvosCache())
+                finish();
+            else
+                confirmarSalvarDadosCache();
         } catch (IllegalArgumentException iae){
             Toast.makeText(this, iae.getMessage(), Toast.LENGTH_SHORT).show();
         } catch (NoSuchElementException nsee){
@@ -127,9 +129,6 @@ public class TelaRegistrarParticipante extends AppCompatActivity {
         String input = edtRa.getText().toString();
         return !(input.isEmpty());
     }
-    public void salvarCache(){
-        CacheHelper.saveToCache(this, inputNome, inputEmail, inputRa);
-    }
     public void pegarDadosCace(){
         String[] dadosCache = CacheHelper.getFromCache(this);
         for(String s : dadosCache){
@@ -137,6 +136,13 @@ public class TelaRegistrarParticipante extends AppCompatActivity {
                 return;
         }
         mostrarDadosCache(dadosCache);
+    }
+    public boolean dadosJaSalvosCache(){
+        // verificar se dados inseridos ja estão salvos em cache
+        String[] dadosCache = CacheHelper.getFromCache(this);
+        if(dadosCache[0].equals(inputNome) && dadosCache[1].equals(inputEmail) && dadosCache[2].equals(inputRa))
+            return true;
+        return false;
     }
     private void mostrarDadosCache(String[] dadosCache){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -164,6 +170,34 @@ public class TelaRegistrarParticipante extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    private void confirmarSalvarDadosCache(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Salvar informações?");
+        builder.setMessage(
+                "\nNome: " + inputNome +
+                        "\nEmail: " + inputEmail +
+                        "\nRA: " + inputRa
+        );
+        builder.setPositiveButton("Salvar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                CacheHelper.saveToCache(TelaRegistrarParticipante.this, inputNome, inputEmail, inputRa);
+                dialog.dismiss();
+                finish();
+            }
+        });
+        builder.setNegativeButton("Não salvar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 
 
 }
