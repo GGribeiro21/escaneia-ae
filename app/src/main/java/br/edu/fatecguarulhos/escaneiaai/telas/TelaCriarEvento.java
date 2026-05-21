@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import br.edu.fatecguarulhos.escaneiaai.R;
-import br.edu.fatecguarulhos.escaneiaai.TelaEditarEvento;
 import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 

@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.fatecguarulhos.escaneiaai.R;
-import br.edu.fatecguarulhos.escaneiaai.TelaEditarEvento;
 import br.edu.fatecguarulhos.escaneiaai.adapter.ParticipanteAdapter;
 import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
 import br.edu.fatecguarulhos.escaneiaai.interfaces.FirebaseCallback;
