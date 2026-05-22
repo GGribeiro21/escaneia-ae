@@ -36,7 +36,7 @@ public class CardEvento extends ConstraintLayout {
     }
     private void inicializarComponentes(Context context){
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.card_evento, this, true);
+        inflater.inflate(R.layout.card_evento_old, this, true);
         CardView card = findViewById(R.id.cardView_evento);
         //jsonEvento =
         card.setOnClickListener(new OnClickListener(){
