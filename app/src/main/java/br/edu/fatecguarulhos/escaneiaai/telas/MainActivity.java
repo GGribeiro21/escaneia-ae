@@ -15,13 +15,21 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import br.edu.fatecguarulhos.escaneiaai.R;
+import br.edu.fatecguarulhos.escaneiaai.adapter.EventoAdapter;
+import br.edu.fatecguarulhos.escaneiaai.adapter.ParticipanteAdapter;
 import br.edu.fatecguarulhos.escaneiaai.components.CardEvento;
 import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
 import br.edu.fatecguarulhos.escaneiaai.interfaces.FirebaseCallback;
@@ -29,6 +37,9 @@ import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 
 public class MainActivity extends AppCompatActivity {
     private LinearLayout ll;
+    private RecyclerView rvEventos;
+    private ArrayList<Evento> eventosArrayList;
+    private EventoAdapter adapter;
     private EventoDao dbConnection;
     private FloatingActionButton btnQrCode;
     @Override
@@ -59,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private void inicializarValores(){
         try{
             ll = findViewById(R.id.layout_dados_main);
+            rvEventos = findViewById(R.id.rvEventos_main);
             dbConnection = new EventoDao();
             btnQrCode = findViewById(R.id.fabAbrirLeitorQrCode_main);
         } catch (RuntimeException re){
@@ -70,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
         dbConnection.getAllEventos(new FirebaseCallback() {
             @Override
             public void onCallbackForAll(List<Evento> lista) {
-
-                atualizarListaEventos(lista);
+                gerarListaCardParticipantes(ordenarEventos(lista));
+                //atualizarListaEventos(lista);
             }
 
             @Override
@@ -93,7 +105,48 @@ public class MainActivity extends AppCompatActivity {
         Intent it = new Intent(this, CameraLeitorCode.class);
         startActivity(it);
     }
+    public List<Evento> ordenarEventos(List<Evento> lista){
+        List<Evento> eventosList = new ArrayList<>();
+        List<Evento> eventosEncerrados = new ArrayList<>();
+        for(Evento e : lista) {
+            int andamento = momentoEvento(e);
+            if(andamento == 2)
+                eventosEncerrados.add(e);
+            else
+                eventosList.add(e);
+        }
+        for(Evento evento : eventosEncerrados){
+            eventosList.add(evento);
+        }
+        return eventosList;
+    }
 
+    public int momentoEvento(Evento evento){
+        Calendar momentoInicio, momentoFim, dataHoraAtual;
+        momentoInicio = stringToCalendar(evento.getDataInicio());
+        momentoFim = stringToCalendar(evento.getDataFim());
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.getDefault());
+        String formattedDate = df.format(Calendar.getInstance().getTime());
+        dataHoraAtual = stringToCalendar(formattedDate);
+        if(dataHoraAtual.before(momentoInicio))
+            return 0;
+        if(dataHoraAtual.after(momentoFim))
+            return 2;
+        return 1;
+    }
+
+    public Calendar stringToCalendar(String dateString) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.getDefault());
+        try {
+            Date date = sdf.parse(dateString);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            return cal;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     public void atualizarListaEventos(List<Evento> lista){
         ll.removeAllViewsInLayout();
         List<CardEvento> eventosEncerrados = new ArrayList<>();
@@ -111,6 +164,13 @@ public class MainActivity extends AppCompatActivity {
         for(CardEvento ce : eventosEncerrados){
             ll.addView(ce);
         }
+    }
+    private void gerarListaCardParticipantes(List<Evento> eventos) {
+        rvEventos.setLayoutManager(new LinearLayoutManager(this));
+        eventosArrayList = new ArrayList<>();
+        adapter = new EventoAdapter(this, eventosArrayList);
+        eventosArrayList.addAll(eventos);
+        rvEventos.setAdapter(adapter);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
