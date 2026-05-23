@@ -39,7 +39,7 @@ import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 import br.edu.fatecguarulhos.escaneiaai.models.Participante;
 
 public class TelaEvento extends AppCompatActivity {
-    private TextView txtTituloEvento, txtLocalEvento, txtDataEvento, txtDescricaoEvento;
+    private TextView txtTitulo, txtLocal, txtDataHora, txtDescricao;
     private FloatingActionButton fabQrCode, fabEditarEvento;
     private Evento evento;
     private RecyclerView rvParticipantes;
@@ -67,27 +67,28 @@ public class TelaEvento extends AppCompatActivity {
     }
 
     private void inicializarComponentes(){
-        txtTituloEvento = findViewById(R.id.txtTituloEvento_actv_tela_evento);
-        txtDataEvento = findViewById(R.id.txtHorarioEvento_telaEvento);
-        txtLocalEvento = findViewById(R.id.txtLocalEvento_telaEvento);
-        txtDescricaoEvento = findViewById(R.id.txtDescricaoEvento_telaEvento);
+        txtTitulo = findViewById(R.id.txtTituloEvento_telaEvento);
+        txtLocal = findViewById(R.id.txtLocalEvento_telaEvento);
+        txtDataHora = findViewById(R.id.txtHorarioEvento_telaEvento);
+        txtDescricao = findViewById(R.id.txtDescricaoEvento_telaEvento);
         fabQrCode = findViewById(R.id.fabQrCode_telaEvento);
         fabEditarEvento = findViewById(R.id.fabEditarEvento_telaEvento);
-        rvParticipantes = findViewById(R.id.rvPresentes);
+        rvParticipantes = findViewById(R.id.rvPresentes_telaEvento);
     }
     private void configurarComponentes(){
-        txtTituloEvento.setText(evento.getTitulo());
-        txtDataEvento.setText("Inicio: " + evento.getDataInicio() + "\nFim: " + evento.getDataFim());
-        txtLocalEvento.setText("Local: " + evento.getLocal());
-
-        if(evento.getDescricao() != null && !(evento.getDescricao().equals("")))
-            txtDescricaoEvento.setText("Descrição: " + evento.getDescricao());
+        txtTitulo.setText(evento.getTitulo());
+        txtDataHora.setText("Inicio: " + evento.getDataInicio() + "\nFim: " + evento.getDataFim());
+        txtLocal.setText("Local: " + evento.getLocal());
+        String descricaoEvento = evento.getDescricao();
+        if(descricaoEvento != null && !(descricaoEvento.equals("")))
+            txtDescricao.setText("Descrição: " + descricaoEvento);
         else
-            txtDescricaoEvento.setText("Descrição: Sem descricao");
+            txtDescricao.setText("Descrição: Sem descricao");
+
         fabQrCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                abrirTelaQrCode();
+                telaQrCode();
             }
         });
         fabEditarEvento.setOnClickListener(new View.OnClickListener() {
@@ -109,29 +110,7 @@ public class TelaEvento extends AppCompatActivity {
         participantesArrayList.addAll(evento.getParticipantes());
         rvParticipantes.setAdapter(adapter);
     }
-    private void abrirTelaQrCode(){
-        Intent it  = new Intent(this, TelaQrCode.class);
-        // enviar id para uso na criação do qrCode
-        String id = evento.getId();
-        String titulo = evento.getTitulo();
-        it.putExtra("id", id);
-        it.putExtra("titulo",titulo);
-        startActivity(it);
-    }
-    // appbar
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.appbar_voltar, menu);
-        return true;
-    }
 
-    private void telaEditarEvento(){
-        String eventoJson = new Gson().toJson(evento);
-        Intent it = new Intent(this, TelaEditarEvento.class);
-        it.putExtra("jsonEvento", eventoJson);
-        startActivity(it);
-    }
     private void pedirSenha(){
         final EditText inputSenha = new EditText(this);
 
@@ -153,8 +132,7 @@ public class TelaEvento extends AppCompatActivity {
                 .setMessage("Digite a senha para continuar:")
                 .setView(container)
                 .setPositiveButton("Confirmar", (dialog, whichButton) -> {
-                    String strSenha = inputSenha.getText().toString();
-                    if(strSenha.equals(evento.getSenha())){
+                    if(validarSenha(inputSenha.getText().toString())){
                         dialog.dismiss();
                         telaEditarEvento();
                     } else {
@@ -168,20 +146,41 @@ public class TelaEvento extends AppCompatActivity {
                 })
                 .show();
     }
-    private void validarSenha(){}
+    private boolean validarSenha(String input){
+        return input.equals(evento.getSenha());
+    }
     private boolean validarIdCelular(){
         return (evento.getIdCriador().equals(getIdCelular()));
     }
     private String getIdCelular(){
         return Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
-
-    public void voltar(View view){
-        finish();
+    private void telaEditarEvento(){
+        String eventoJson = new Gson().toJson(evento);
+        Intent it = new Intent(this, TelaEditarEvento.class);
+        it.putExtra("jsonEvento", eventoJson);
+        startActivity(it);
     }
+    private void telaQrCode(){
+        Intent it  = new Intent(this, TelaQrCode.class);
+        // enviar id para uso na criação do qrCode
+        String id = evento.getId();
+        String titulo = evento.getTitulo();
 
+        it.putExtra("id", id);
+        it.putExtra("titulo",titulo);
+
+        startActivity(it);
+    }
     public void voltar(MenuItem menuItem){
         finish();
+    }
+    // appbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.appbar_voltar, menu);
+        return true;
     }
 
     @Override

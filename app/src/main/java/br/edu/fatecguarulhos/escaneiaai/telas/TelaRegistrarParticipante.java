@@ -27,6 +27,8 @@ public class TelaRegistrarParticipante extends AppCompatActivity {
     private String eventoJson, inputNome, inputEmail, inputRa;
     private EditText edtNome, edtEmail, edtRa;
     private Button btnRegistrar;
+
+    private ParticipanteDao participanteDAO = new ParticipanteDao();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,11 +55,11 @@ public class TelaRegistrarParticipante extends AppCompatActivity {
         btnRegistrar = findViewById(R.id.btnRegistrar_FormRegistrarParticipante);
     }
     private void configurarComponentes(){
-        pegarDadosCace();
+        buscarDadosCache();
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(validarCampos()){
+                if(validarDados()){
                     Participante p = criarParticipante();
                     registrarParticipante(p);
                 }
@@ -93,58 +95,50 @@ public class TelaRegistrarParticipante extends AppCompatActivity {
         }
     }
     private void registrarEntrada(Participante p){
-        ParticipanteDao dbConnection = new ParticipanteDao();
-        dbConnection.registrarEntradaParticipante(eventoJson, p);
+        participanteDAO.registrarEntradaParticipante(eventoJson, p);
         Toast.makeText(this, "Entrada confirmada!", Toast.LENGTH_SHORT).show();
     }
     private void registrarSaida(Participante p){
-        ParticipanteDao dbConnection = new ParticipanteDao();
-        dbConnection.registrarSaidaParticipante(eventoJson, p);
+        participanteDAO.registrarSaidaParticipante(eventoJson, p);
         Toast.makeText(this, "Saida confirmada!", Toast.LENGTH_SHORT).show();
     }
-    private boolean validarCampos(){
-        if(!validarCampoNome()) {
+    private boolean validarDados(){
+        if(!validarNome()) {
             Toast.makeText(this, "Insira um nome válido", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(!validarCampoEmail()) {
+        if(!validarEmail()) {
             Toast.makeText(this, "Insira um email válido", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(!validarCampoRa()) {
+        if(!validarRa()) {
             Toast.makeText(this, "Insira um RA válido", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
     }
-    private boolean validarCampoNome(){
+    private boolean validarNome(){
         String input = edtNome.getText().toString();
         return !(input.trim().isEmpty());
     }
-    private boolean validarCampoEmail(){
+    private boolean validarEmail(){
         String input = edtEmail.getText().toString();
         return !(input.isEmpty());
     }
-    private boolean validarCampoRa(){
+    private boolean validarRa(){
         String input = edtRa.getText().toString();
         return !(input.isEmpty());
     }
-    public void pegarDadosCace(){
+
+    public void buscarDadosCache(){
         String[] dadosCache = CacheHelper.getFromCache(this);
         for(String s : dadosCache){
             if(s.equals("") || s.isEmpty())
                 return;
         }
-        mostrarDadosCache(dadosCache);
+        exibirDadosCache(dadosCache);
     }
-    public boolean dadosJaSalvosCache(){
-        // verificar se dados inseridos ja estão salvos em cache
-        String[] dadosCache = CacheHelper.getFromCache(this);
-        if(dadosCache[0].equals(inputNome) && dadosCache[1].equals(inputEmail) && dadosCache[2].equals(inputRa))
-            return true;
-        return false;
-    }
-    private void mostrarDadosCache(String[] dadosCache){
+    private void exibirDadosCache(String[] dadosCache){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Usar ultimos dados salvos?");
         builder.setMessage(
@@ -170,7 +164,13 @@ public class TelaRegistrarParticipante extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
+    public boolean dadosJaSalvosCache(){
+        // verificar se dados inseridos ja estão salvos em cache
+        String[] dadosCache = CacheHelper.getFromCache(this);
+        if(dadosCache[0].equals(inputNome) && dadosCache[1].equals(inputEmail) && dadosCache[2].equals(inputRa))
+            return true;
+        return false;
+    }
     private void confirmarSalvarDadosCache(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Salvar informações?");

@@ -55,7 +55,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <EditText
-                    android:id="@+id/edtNomeEvento_formCriarEvento"
+                    android:id="@+id/edtTituloEvento_criarEvento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#FFFFFF"
@@ -83,7 +83,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <EditText
-                        android:id="@+id/edtdataInicio_formCriaEvento"
+                        android:id="@+id/edtDataInicio_criarEvento"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="true"
@@ -106,7 +106,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <EditText
-                        android:id="@+id/edtdataFim_formCriaEvento"
+                        android:id="@+id/edtDataFim_criarEvento"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="true"
@@ -160,7 +160,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCriarEvento_formCriarEvento"
+                android:id="@+id/btnCriarEvento_criarEvento"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginBottom="12dp"
@@ -171,7 +171,7 @@
                 app:cornerRadius="12dp" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnVoltar_formCriarEvento"
+                android:id="@+id/btnVoltar_criarEvento"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:text="VOLTAR"

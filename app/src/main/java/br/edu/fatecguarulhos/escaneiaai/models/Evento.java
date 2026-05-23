@@ -16,33 +16,8 @@ public class Evento {
     private String titulo, id, idCriador, senha, local, descricao;
     private String dataInicio, dataFim, momentoInicio;
     private List<Participante> participantes = new ArrayList<>();
-    private Bitmap qrCode;
-
-    public Bitmap getQrCode() {
-        return qrCode;
-    }
-
-    public void setQrCode(Bitmap qrCode) {
-        this.qrCode = qrCode;
-    }
-
-    public Evento(String titulo){
-
-        qrCode = QrCodeManager.gerarQrCode(id);
-        this.titulo = titulo;
-    }
 
     public Evento() {
-    }
-
-    private String imagemFormatadaParaImpressao(ImpressoraTermica impressora){
-        return "[C]<img>"+ PrinterTextParserImg.bitmapToHexadecimalString(impressora.getImpressora(), qrCode) + "</img>\n" ;
-    }
-    //@Override
-    public String dadosASeremImpressos(ImpressoraTermica impressora) {
-        return Imprimivel.TITULO_APP +
-                "[L]" + titulo +
-                Imprimivel.DATA_E_HORA_IMPRESSAO;
     }
 
     public String getTitulo() {

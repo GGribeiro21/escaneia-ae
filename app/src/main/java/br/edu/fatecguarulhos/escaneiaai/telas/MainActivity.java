@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -29,18 +28,15 @@ import java.util.Locale;
 
 import br.edu.fatecguarulhos.escaneiaai.R;
 import br.edu.fatecguarulhos.escaneiaai.adapter.EventoAdapter;
-import br.edu.fatecguarulhos.escaneiaai.adapter.ParticipanteAdapter;
-import br.edu.fatecguarulhos.escaneiaai.components.CardEvento;
 import br.edu.fatecguarulhos.escaneiaai.dao.EventoDao;
 import br.edu.fatecguarulhos.escaneiaai.interfaces.FirebaseCallback;
 import br.edu.fatecguarulhos.escaneiaai.models.Evento;
 
 public class MainActivity extends AppCompatActivity {
-    private LinearLayout ll;
     private RecyclerView rvEventos;
     private ArrayList<Evento> eventosArrayList;
     private EventoAdapter adapter;
-    private EventoDao dbConnection;
+    private EventoDao eventoDAO;
     private FloatingActionButton btnQrCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,28 +58,28 @@ public class MainActivity extends AppCompatActivity {
         // configiração base/inicial do codigo
         try{
             inicializarValores();
+            inicializarComponentes();
             configurarComponentes();
         } catch (RuntimeException re){
             Toast.makeText(this, re.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-    private void inicializarValores(){
+    private void inicializarValores() {
+            eventoDAO = new EventoDao();
+    }
+    private void inicializarComponentes(){
         try{
-            ll = findViewById(R.id.layout_dados_main);
             rvEventos = findViewById(R.id.rvEventos_main);
-            dbConnection = new EventoDao();
             btnQrCode = findViewById(R.id.fabAbrirLeitorQrCode_main);
         } catch (RuntimeException re){
             Toast.makeText(this, re.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
     private void configurarComponentes(){
-        dbConnection.getAllEventos(new FirebaseCallback() {
+        eventoDAO.getAllEventos(new FirebaseCallback() {
             @Override
             public void onCallbackForAll(List<Evento> lista) {
                 gerarListaCardParticipantes(ordenarEventos(lista));
-                //atualizarListaEventos(lista);
             }
 
             @Override
@@ -98,19 +94,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    // botão para abrir camera e ler QrCode
-    public void abrirCameraQrCode(){
-        // jogar em outra activity para evitar erros com o onBackPressed
-        Intent it = new Intent(this, CameraLeitorCode.class);
-        startActivity(it);
-    }
     public List<Evento> ordenarEventos(List<Evento> lista){
         List<Evento> eventosList = new ArrayList<>();
         List<Evento> eventosEncerrados = new ArrayList<>();
         for(Evento e : lista) {
-            int andamento = momentoEvento(e);
-            if(andamento == 2)
+            int momentoAtualEvento = momentoEvento(e);
+            if(momentoAtualEvento == 2)
                 eventosEncerrados.add(e);
             else
                 eventosList.add(e);
@@ -121,6 +110,13 @@ public class MainActivity extends AppCompatActivity {
         return eventosList;
     }
 
+    private void gerarListaCardParticipantes(List<Evento> eventos) {
+        rvEventos.setLayoutManager(new LinearLayoutManager(this));
+        eventosArrayList = new ArrayList<>();
+        adapter = new EventoAdapter(this, eventosArrayList);
+        eventosArrayList.addAll(eventos);
+        rvEventos.setAdapter(adapter);
+    }
     public int momentoEvento(Evento evento){
         Calendar momentoInicio, momentoFim, dataHoraAtual;
         momentoInicio = stringToCalendar(evento.getDataInicio());
@@ -147,30 +143,16 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
-    public void atualizarListaEventos(List<Evento> lista){
-        ll.removeAllViewsInLayout();
-        List<CardEvento> eventosEncerrados = new ArrayList<>();
-
-
-        for(Evento e : lista) {
-            CardEvento card = new CardEvento(this);
-            card.alterarConteudo(e);
-
-            if (card.getAndamento() == 2)
-                eventosEncerrados.add(card);
-            else
-                ll.addView(card);
-        }
-        for(CardEvento ce : eventosEncerrados){
-            ll.addView(ce);
-        }
+    public void telaAdicionarEvento(MenuItem item){
+        Intent it = new Intent(this, TelaCriarEvento.class);
+        startActivity(it);
     }
-    private void gerarListaCardParticipantes(List<Evento> eventos) {
-        rvEventos.setLayoutManager(new LinearLayoutManager(this));
-        eventosArrayList = new ArrayList<>();
-        adapter = new EventoAdapter(this, eventosArrayList);
-        eventosArrayList.addAll(eventos);
-        rvEventos.setAdapter(adapter);
+
+    // botão para abrir camera e ler QrCode
+    public void abrirCameraQrCode(){
+        // jogar em outra activity para evitar erros com o onBackPressed
+        Intent it = new Intent(this, CameraLeitorCode.class);
+        startActivity(it);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -180,9 +162,5 @@ public class MainActivity extends AppCompatActivity {
     }
     public void sair(MenuItem menuItem){
         finish();
-    }
-    public void adicionarEvento(MenuItem item){
-        Intent it = new Intent(this, TelaCriarEvento.class);
-        startActivity(it);
     }
 }
