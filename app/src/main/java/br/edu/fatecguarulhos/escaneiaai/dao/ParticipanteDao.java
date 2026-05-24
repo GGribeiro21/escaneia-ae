@@ -22,24 +22,6 @@ import br.edu.fatecguarulhos.escaneiaai.models.Participante;
 public class ParticipanteDao {
     private FirebaseDatabase database;
     public ParticipanteDao(){
-        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
-        connectedRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean connected = snapshot.getValue(Boolean.class);
-                if (connected) {
-                    Log.d(TAG, "connected");
-                } else {
-                    Log.d(TAG, "not connected");
-                    throw new RuntimeException("Sem conexão");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w(TAG, "Listener was cancelled");
-            }
-        });
         database = FirebaseDatabase.getInstance();
     }
     public void registrarEntradaParticipante(String eventoJson, Participante participante) {

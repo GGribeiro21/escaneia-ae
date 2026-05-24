@@ -22,6 +22,7 @@ import br.edu.fatecguarulhos.escaneiaai.interfaces.FirebaseCallback;
 
 public class EventoDao {
     private FirebaseDatabase database;
+    private DatabaseReference ref;
     public EventoDao(){
         DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
         connectedRef.addValueEventListener(new ValueEventListener() {
@@ -40,14 +41,15 @@ public class EventoDao {
                 Log.w(TAG, "Listener was cancelled");
             }
         });
+         ref = FirebaseDatabase.getInstance().getReference("eventos");
+
         database = FirebaseDatabase.getInstance();
 
     }
     public void adicionarEvento(Evento e){
-        DatabaseReference myRef = database.getReference("eventos");
-        String eventoId = myRef.push().getKey();
+        String eventoId = ref.push().getKey();
         e.setId(eventoId);
-        myRef.child(eventoId).setValue(e)
+        ref.child(eventoId).setValue(e)
                 .addOnSuccessListener(a -> {
                     //Toast informando sucesso
                 })
@@ -58,10 +60,7 @@ public class EventoDao {
 
 
     public void getAllEventos(FirebaseCallback callback) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("eventos");
-
-
-        ref.orderByChild(ref.getKey() + "dataInicio").addValueEventListener(new ValueEventListener() {
+        ref.orderByChild("momentoInicio").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Evento> listaEventos = new ArrayList<Evento>();
@@ -86,8 +85,6 @@ public class EventoDao {
     }
 
     public void getEventoById(String id, FirebaseCallback callback){
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("eventos");
-
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -107,12 +104,10 @@ public class EventoDao {
         });
     }
     public void updateEvento(Evento evento){
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("eventos").child(evento.getId());;
-        ref.setValue(evento);
+        ref.child(evento.getId()).setValue(evento);
     }
     public void deleteEvento(String idEvento){
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("eventos").child(idEvento);;
-        ref.setValue(null);
+        ref.child(idEvento).setValue(null);
     }
 
 

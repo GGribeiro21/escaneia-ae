@@ -55,7 +55,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <EditText
-                    android:id="@+id/edtNomeEvento_telaEditarEvento"
+                    android:id="@+id/edtTituloEvento_editarEvento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#FFFFFF"
@@ -83,7 +83,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <EditText
-                        android:id="@+id/edtdataInicio_telaEditarEvento"
+                        android:id="@+id/edtDataInicio_editarEvento"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="true"
@@ -106,7 +106,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <EditText
-                        android:id="@+id/edtdataFim_telaEditarEvento"
+                        android:id="@+id/edtDataFim_editarEvento"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="true"
@@ -134,7 +134,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <EditText
-                    android:id="@+id/edtLocal_telaEditarEvento"
+                    android:id="@+id/edtLocal_editarEvento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#FFFFFF"
@@ -154,7 +154,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <EditText
-                    android:id="@+id/edtDescricao_telaEditarEvento"
+                    android:id="@+id/edtDescricao_editarEvento"
                     android:layout_width="match_parent"
                     android:layout_height="139dp"
                     android:gravity="start|top"
@@ -166,7 +166,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnEditarEvento_telaEditarEvento"
+                android:id="@+id/btnEditarEvento_editarEvento"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginBottom="12dp"
@@ -177,7 +177,7 @@
                 app:cornerRadius="12dp" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnExcluirEvento_telaEditarEvento"
+                android:id="@+id/btnExcluirEvento_editarEvento"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginBottom="12dp"
@@ -191,7 +191,7 @@
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnVoltar_telaEditarEvento"
+                android:id="@+id/btnVoltar_editarEvento"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:text="VOLTAR"

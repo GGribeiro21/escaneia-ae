@@ -4,7 +4,7 @@
 
     <item
         android:icon="@android:drawable/ic_menu_add"
-        android:onClick="adicionarEvento"
+        android:onClick="telaAdicionarEvento"
         android:title="Item"
         app:showAsAction="ifRoom" />
     <item
